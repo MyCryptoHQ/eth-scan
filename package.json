@@ -17,6 +17,11 @@
   "repository": "https://github.com/Mrtenz/eth-scan.git",
   "author": "Maarten Zuidhoorn <maarten@zuidhoorn.com>",
   "license": "MIT",
+  "files": [
+    "dist",
+    "src",
+    "typings"
+  ],
   "scripts": {
     "prepare": "yarn run build",
     "prepublishOnly": "yarn run test",
