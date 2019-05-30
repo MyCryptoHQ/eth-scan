@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src/",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "noEmitOnError": true,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "./src/**/*",
+    "./test/**/*",
+    "./webpack.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
