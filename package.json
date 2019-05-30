@@ -1,6 +1,6 @@
 {
   "name": "eth-scan",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "An efficient Ether and token balance scanner",
   "keywords": [
     "ethereum",
