@@ -1,3 +1,5 @@
+const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
+
 /**
  * Decode raw data to an array of bigints.
  *
@@ -64,7 +66,9 @@ export const encodeWithId = (id: string, addresses: string[], token?: string): B
  * @return {string} The hexadecimal string.
  */
 export const bufferToString = (buffer: Buffer): string => {
-  return `0x${buffer.toString('hex')}`;
+  return new Uint8Array(buffer).reduce<string>((current, next) => {
+    return current + HEXADECIMAL_CHARACTERS[next >> 4] + HEXADECIMAL_CHARACTERS[next & 15];
+  }, '0x');
 };
 
 /**
