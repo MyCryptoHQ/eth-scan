@@ -6452,9 +6452,9 @@ truffle-hdwallet-provider@^1.0.9:
     websocket "^1.0.28"
 
 truffle@^5.0.19:
-  version "5.0.20"
-  resolved "https://registry.yarnpkg.com/truffle/-/truffle-5.0.20.tgz#6fa0ebaa8d3a5c325a717a3bfaf3fee2bf6f0475"
-  integrity sha512-Vr2+UnfoFXPf0shry1CawBrQYGveht4K+vfPx63JwVI71vqpeybPqFHiiuqmcnZ3ch+aQgaelNNQU4rsAKgTJg==
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/truffle/-/truffle-5.0.21.tgz#ecb25fb0097093a3b38eaf79d258889cfc5ad015"
+  integrity sha512-RF5TETOzp9WCTsSEZX0Cqtb9FQjJU288nO/VZX6melPSoDwmDOApqhjLZ5XNXNmVpUMo4Ds2TqA5xPX8D+HNsg==
   dependencies:
     app-module-path "^2.2.0"
     mocha "^4.1.0"
