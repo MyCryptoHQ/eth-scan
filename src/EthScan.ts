@@ -1,6 +1,6 @@
 import { Provider } from './providers';
 import { batch, bufferToString, decode, encodeWithId, stringToBuffer } from './utils';
-import { CONTRACT_ADDRESS, ETHER_BALANCES_ID, TOKEN_BALANCES_ID } from './constants';
+import { CONTRACT_ADDRESS, ETHER_BALANCES_ID, TOKEN_BALANCES_ID, SCAN_TOKENS_ID } from './constants';
 
 /**
  * An object that contains the address (key) and balance (value). The balance is a native bigint.
