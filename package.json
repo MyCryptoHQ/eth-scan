@@ -16,6 +16,9 @@
   "types": "typings/index.d.ts",
   "repository": "https://github.com/Mrtenz/eth-scan.git",
   "author": "Maarten Zuidhoorn <maarten@zuidhoorn.com>",
+  "contributors": [
+    "Luit Hollander <luit@hollander.email> (https://luit.me)"
+  ],
   "license": "MIT",
   "files": [
     "dist",
