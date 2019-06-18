@@ -40,11 +40,4 @@ contract BalanceScanner {
       balances[i] = tokenContract.balanceOf(addresses[i]);
     }
   }
-
-  /**
-   * @notice This contract does not accept ETH payments.
-   */
-  function() external payable {
-    revert();
-  }
 }
