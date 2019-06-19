@@ -640,6 +640,21 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@ethersproject/abi@^5.0.0-beta.133":
+  version "5.0.0-beta.133"
+  resolved "https://registry.yarnpkg.com/@ethersproject/abi/-/abi-5.0.0-beta.133.tgz#45dbdc0adcfb104eacbd12df7ea24de4515fb681"
+  integrity sha512-p8kRDka4PjD2fgNW4HgvvmC9rReoIBYQMCdHEbWTR1rXCiNhLQNQM9gjAw/frl+nNAzjNd0lFnCsZTS1uDlTRg==
+  dependencies:
+    "@ethersproject/address" ">5.0.0-beta.0"
+    "@ethersproject/bignumber" ">5.0.0-beta.0"
+    "@ethersproject/bytes" ">5.0.0-beta.0"
+    "@ethersproject/constants" ">5.0.0-beta.0"
+    "@ethersproject/errors" ">5.0.0-beta.0"
+    "@ethersproject/hash" ">5.0.0-beta.0"
+    "@ethersproject/keccak256" ">5.0.0-beta.0"
+    "@ethersproject/properties" ">5.0.0-beta.0"
+    "@ethersproject/strings" ">5.0.0-beta.0"
+
 "@ethersproject/abstract-provider@>5.0.0-beta.0":
   version "5.0.0-beta.126"
   resolved "https://registry.yarnpkg.com/@ethersproject/abstract-provider/-/abstract-provider-5.0.0-beta.126.tgz#640acc8c0ff1092d15da82d048d3d37cb295a916"

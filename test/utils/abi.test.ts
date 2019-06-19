@@ -1,6 +1,11 @@
 import { expect } from 'chai';
 import { decode, encode, encodeWithId, stringToBuffer } from '../../src/utils';
-import { ETHER_BALANCES_ID, TOKEN_BALANCES_ID } from '../../src/constants';
+import {
+  ETHER_BALANCES_ID,
+  ETHER_BALANCES_TYPE,
+  TOKEN_BALANCES_ID,
+  TOKEN_BALANCES_TYPE
+} from '../../src/constants';
 
 describe('utils/abi', () => {
   describe('decode()', () => {
@@ -21,10 +26,11 @@ describe('utils/abi', () => {
 
   describe('encode()', () => {
     it('should encode addresses', () => {
-      const encoded = encode(['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f']).toString('hex');
+      const encoded = encode(ETHER_BALANCES_TYPE, ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f']);
 
       expect(encoded).to.equal(
-        '0000000000000000000000000000000000000000000000000000000000000020' +
+        '0x' +
+          '0000000000000000000000000000000000000000000000000000000000000020' +
           '0000000000000000000000000000000000000000000000000000000000000001' +
           '000000000000000000000000f00f00f00f00f00f00f00f00f00f00f00f00f00f'
       );
@@ -32,12 +38,14 @@ describe('utils/abi', () => {
 
     it('should encode addresses with a token specified', () => {
       const encoded = encode(
+        TOKEN_BALANCES_TYPE,
         ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'],
         '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
-      ).toString('hex');
+      );
 
       expect(encoded).to.equal(
-        '0000000000000000000000000000000000000000000000000000000000000040' +
+        '0x' +
+          '0000000000000000000000000000000000000000000000000000000000000040' +
           '00000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a23260359' +
           '0000000000000000000000000000000000000000000000000000000000000001' +
           '000000000000000000000000f00f00f00f00f00f00f00f00f00f00f00f00f00f'
@@ -47,12 +55,13 @@ describe('utils/abi', () => {
 
   describe('encodeWithId()', () => {
     it('should encode addresses with a function identifier', () => {
-      const encoded = encodeWithId(ETHER_BALANCES_ID, [
+      const encoded = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, [
         '0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'
-      ]).toString('hex');
+      ]);
 
       expect(encoded).to.equal(
-        ETHER_BALANCES_ID +
+        '0x' +
+          ETHER_BALANCES_ID +
           '0000000000000000000000000000000000000000000000000000000000000020' +
           '0000000000000000000000000000000000000000000000000000000000000001' +
           '000000000000000000000000f00f00f00f00f00f00f00f00f00f00f00f00f00f'
@@ -62,12 +71,14 @@ describe('utils/abi', () => {
     it('should encode addresses with a function identifier and a token specified', () => {
       const encoded = encodeWithId(
         TOKEN_BALANCES_ID,
+        TOKEN_BALANCES_TYPE,
         ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'],
         '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
-      ).toString('hex');
+      );
 
       expect(encoded).to.equal(
-        TOKEN_BALANCES_ID +
+        '0x' +
+          TOKEN_BALANCES_ID +
           '0000000000000000000000000000000000000000000000000000000000000040' +
           '00000000000000000000000089d24a6b4ccb1b6faa2625fe562bdd9a23260359' +
           '0000000000000000000000000000000000000000000000000000000000000001' +
