@@ -9,3 +9,8 @@ export const TOKEN_BALANCES_ID = 'aad33091';
  * etherBalances(address[])
  */
 export const ETHER_BALANCES_ID = 'dbdbb51b';
+
+/**
+ * scanTokens(address,address[])
+ */
+export const SCAN_TOKENS_ID = '141826c9';
