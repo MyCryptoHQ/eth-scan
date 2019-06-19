@@ -68,11 +68,11 @@ export default class EthScan {
    * Get the ERC-20 token balances of the token with the address `tokenAddress` for the addresses
    * specified.
    *
-   * @param {string} tokenAddress The token contract to get the balances from.
    * @param {string[]} addresses The addresses to get the balances for.
+   * @param {string} tokenAddress The token contract to get the balances from.
    * @return {Promise<BalanceMap>} A Promise with the balances as BalanceMap.
    */
-  public async getTokenBalances(tokenAddress: string, addresses: string[]): Promise<BalanceMap> {
+  public async getTokenBalances(addresses: string[], tokenAddress: string): Promise<BalanceMap> {
     const balances = await batch(
       (batchedAddresses: string[]) => {
         const data = encodeWithId(
@@ -94,12 +94,11 @@ export default class EthScan {
   /**
    * Get the ERC-20 token balance of the tokens with the addresses `tokenAddresses` for the single
    * address specified.
-   *
-   * @param {string[]} tokenAddresses The token contracts to get the balance from.
    * @param {string} address The address to get the balance for.
+   * @param {string[]} tokenAddresses The token contracts to get the balance from.
    * @return {Promise<BalanceMap>} A Promise with the balances as BalanceMap.
    */
-  public async getTokensBalance(tokenAddresses: string[], address: string): Promise<BalanceMap> {
+  public async getTokensBalance(address: string, tokenAddresses: string[]): Promise<BalanceMap> {
     const balances = await batch(
       (batchedAddresses: string[]) => {
         const data = encodeWithId(

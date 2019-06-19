@@ -34,7 +34,7 @@ describe('EthScan', () => {
       contractAddress: contract.address
     });
 
-    const balances = await scanner.getTokenBalances(token.address, accounts);
+    const balances = await scanner.getTokenBalances(accounts, token.address);
 
     for (const account of accounts) {
       const balance = BigInt(await web3.eth.getBalance(account));
@@ -53,10 +53,10 @@ describe('EthScan', () => {
       contractAddress: contract.address
     });
 
-    const balances = await scanner.getTokensBalance(
-      [token.address, secondToken.address],
-      accounts[0]
-    );
+    const balances = await scanner.getTokensBalance(accounts[0], [
+      token.address,
+      secondToken.address
+    ]);
 
     expect(Object.keys(balances).length).to.equal(2);
     expect(Object.keys(balances)[0]).to.equal(token.address);
