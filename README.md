@@ -70,13 +70,23 @@ Get Ether balances for `addresses`.
 
 * Returns: \<Promise\> - A promise with an object with the addresses and the balances.
 
-##### `getTokenBalances(token, addresses)`
+##### `getTokenBalances(addresses, token)`
 
 Get ERC-20 token balances from `token` for `addresses`. This does not check if the address specified is a token and will throw an error if it isn't.
 
+* `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+
 * `token` \<string\> - The address of the ERC-20 token.
 
-* `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+* Returns: \<Promise\> - A promise with an object with the addresses and the balances.
+
+##### `getTokensBalance(address, tokens)`
+
+Get ERC-20 token balances from `tokens` for `address`. If one of the token addresses specified is not a token, a balance of 0 will be used.
+
+* `address` \<string\> - The address to get token balances for.
+
+* `tokens` \<string[]\> - An array of ERC-20 token addresses.
 
 * Returns: \<Promise\> - A promise with an object with the addresses and the balances.
 
