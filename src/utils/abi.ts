@@ -1,3 +1,5 @@
+import { defaultAbiCoder } from '@ethersproject/abi';
+
 const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
 
 /**
@@ -17,46 +19,24 @@ export const decode = (data: Buffer): bigint[] => {
 /**
  * Encode the addresses and an optional token to an input data string.
  *
- * @param {string[]} addresses The addresses formatted as hexadecimal.
- * @param {string} token The address of the token formatted as hexadecimal.
- * @return {string} The input data formatted as hexadecimal.
+ * @param {string[]} types An array of types.
+ * @param {...any[]} args The arguments as defined by the types.
+ * @return {string} The input data formatted as hexadecimal string.
  */
-export const encode = (addresses: string[], token?: string): Buffer => {
-  let buffer: Buffer;
-
-  buffer = Buffer.alloc(32);
-  buffer.writeInt8(token ? 0x40 : 0x20, 31);
-
-  if (token) {
-    const tokenBuffer = Buffer.alloc(32);
-    tokenBuffer.write(token.slice(2), 12, 'hex');
-
-    buffer = Buffer.concat([buffer, tokenBuffer]);
-  }
-
-  const size = Buffer.alloc(32);
-  size.writeInt32BE(addresses.length, 28);
-
-  const addressesBuffer = addresses.reduce<Buffer>((current, next) => {
-    const addressBuffer = Buffer.alloc(32);
-    addressBuffer.write(next.slice(2), 12, 'hex');
-
-    return Buffer.concat([current, addressBuffer]);
-  }, Buffer.alloc(0));
-
-  return Buffer.concat([buffer, size, addressesBuffer]);
+export const encode = (types: string[], ...args: any[]): string => {
+  return defaultAbiCoder.encode(types, [...args]);
 };
 
 /**
  * Encode the addresses and an optional token to an input data string with the function identifier.
  *
  * @param {string} id The function identifier as a hexadecimal string.
- * @param {string[]} addresses The addresses as a hexadecimal string.
- * @param {string} token The address of the token as a hexadecimal string.
+ * @param {string[]} types An array of types.
+ * @param {...any[]} args The arguments as defined by the types.
  * @return {string} The input data as a hexadecimal string.
  */
-export const encodeWithId = (id: string, addresses: string[], token?: string): Buffer => {
-  return Buffer.concat([Buffer.from(id, 'hex'), encode(addresses, token)]);
+export const encodeWithId = (id: string, types: string[], ...args: any[]): string => {
+  return `0x${id}${encode(types, ...args).slice(2)}`;
 };
 
 /**

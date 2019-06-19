@@ -41,6 +41,7 @@
     "lint:tslint": "tslint --project ."
   },
   "dependencies": {
+    "@ethersproject/abi": "^5.0.0-beta.133",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
