@@ -97,5 +97,8 @@
     "hooks": {
       "pre-commit": "yarn run test && yarn run lint:ts && lint-staged"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
