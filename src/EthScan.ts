@@ -1,6 +1,14 @@
 import { Provider } from './providers';
-import { batch, bufferToString, decode, encodeWithId, stringToBuffer } from './utils';
-import { CONTRACT_ADDRESS, ETHER_BALANCES_ID, TOKEN_BALANCES_ID } from './constants';
+import { batch, decode, encodeWithId, stringToBuffer } from './utils';
+import {
+  CONTRACT_ADDRESS,
+  ETHER_BALANCES_ID,
+  ETHER_BALANCES_TYPE,
+  TOKEN_BALANCES_ID,
+  TOKEN_BALANCES_TYPE,
+  TOKENS_BALANCE_ID,
+  TOKENS_BALANCE_TYPE
+} from './constants';
 
 /**
  * An object that contains the address (key) and balance (value). The balance is a native bigint.
@@ -43,42 +51,73 @@ export default class EthScan {
    * @return {Promise<BalanceMap>} A Promise with the balances as BalanceMap.
    */
   public async getEtherBalances(addresses: string[]): Promise<BalanceMap> {
-    return this.getBalances(ETHER_BALANCES_ID, addresses);
+    const balances = await batch(
+      (batchedAddresses: string[]) => {
+        const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, batchedAddresses);
+
+        return this.call(data);
+      },
+      this.options.batchSize || 1000,
+      addresses
+    );
+
+    return this.getBalances(addresses, balances);
   }
 
   /**
    * Get the ERC-20 token balances of the token with the address `tokenAddress` for the addresses
    * specified.
    *
-   * @param {string} tokenAddress The token contract to get the balances from.
    * @param {string[]} addresses The addresses to get the balances for.
+   * @param {string} tokenAddress The token contract to get the balances from.
    * @return {Promise<BalanceMap>} A Promise with the balances as BalanceMap.
    */
-  public async getTokenBalances(tokenAddress: string, addresses: string[]): Promise<BalanceMap> {
-    return this.getBalances(TOKEN_BALANCES_ID, addresses, tokenAddress);
+  public async getTokenBalances(addresses: string[], tokenAddress: string): Promise<BalanceMap> {
+    const balances = await batch(
+      (batchedAddresses: string[]) => {
+        const data = encodeWithId(
+          TOKEN_BALANCES_ID,
+          TOKEN_BALANCES_TYPE,
+          batchedAddresses,
+          tokenAddress
+        );
+
+        return this.call(data);
+      },
+      this.options.batchSize || 1000,
+      addresses
+    );
+
+    return this.getBalances(addresses, balances);
   }
 
   /**
-   * Get Ether or token balances as a BalanceMap.
-   *
-   * @param {string} functionId The function identifier.
-   * @param {string[]} addresses An array of the addresses to get the balance for.
-   * @param {string} tokenAddress The optional token address to get the balance for.
+   * Get the ERC-20 token balance of the tokens with the addresses `tokenAddresses` for the single
+   * address specified.
+   * @param {string} address The address to get the balance for.
+   * @param {string[]} tokenAddresses The token contracts to get the balance from.
    * @return {Promise<BalanceMap>} A Promise with the balances as BalanceMap.
    */
-  private async getBalances(
-    functionId: string,
-    addresses: string[],
-    tokenAddress?: string
-  ): Promise<BalanceMap> {
+  public async getTokensBalance(address: string, tokenAddresses: string[]): Promise<BalanceMap> {
     const balances = await batch(
-      this.call,
+      (batchedAddresses: string[]) => {
+        const data = encodeWithId(
+          TOKENS_BALANCE_ID,
+          TOKENS_BALANCE_TYPE,
+          address,
+          batchedAddresses
+        );
+
+        return this.call(data);
+      },
       this.options.batchSize || 1000,
-      addresses,
-      functionId,
-      tokenAddress
+      tokenAddresses
     );
 
+    return this.getBalances(tokenAddresses, balances);
+  }
+
+  private getBalances(addresses: string[], balances: bigint[]): BalanceMap {
     return balances.reduce<BalanceMap>((current, next, index) => {
       return {
         ...current,
@@ -90,22 +129,15 @@ export default class EthScan {
   /**
    * Use the provider to call the contract.
    *
-   * @param {string[]} addresses An array of the addresses to get the balance for.
-   * @param functionId The function identifier.
-   * @param tokenAddress The optional token address to get the balance for.
+   * @param {string} data The hexadecimal input data to send.
    * @return {Promise<bigint[]>} A Promise with an array of bigints.
    */
-  private async call(
-    addresses: string[],
-    functionId: string,
-    tokenAddress?: string
-  ): Promise<bigint[]> {
-    const data = encodeWithId(functionId, addresses, tokenAddress);
-
+  private async call(data: string): Promise<bigint[]> {
     const response = await this.provider.call(
       this.options.contractAddress || CONTRACT_ADDRESS,
-      bufferToString(data)
+      data
     );
+
     return decode(stringToBuffer(response));
   }
 }

@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import Web3 from 'web3';
 import { Web3Provider } from '../../src/providers';
 import { bufferToString, decode, encodeWithId, stringToBuffer } from '../../src/utils';
-import { ETHER_BALANCES_ID, TOKEN_BALANCES_ID } from '../../src/constants';
+import {
+  ETHER_BALANCES_ID,
+  ETHER_BALANCES_TYPE,
+  TOKEN_BALANCES_ID,
+  TOKEN_BALANCES_TYPE
+} from '../../src/constants';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
@@ -18,8 +23,8 @@ describe('providers/web3', () => {
       const accounts = await web3.eth.getAccounts();
       accounts.shift();
 
-      const data = encodeWithId(ETHER_BALANCES_ID, accounts);
-      const response = await provider.call(contract.address, bufferToString(data));
+      const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, accounts);
+      const response = await provider.call(contract.address, data);
 
       const decoded = decode(stringToBuffer(response));
 
@@ -35,8 +40,8 @@ describe('providers/web3', () => {
       const token = await FixedBalanceToken.new();
       const accounts = await web3.eth.getAccounts();
 
-      const data = encodeWithId(TOKEN_BALANCES_ID, accounts, token.address);
-      const response = await provider.call(contract.address, bufferToString(data));
+      const data = encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, accounts, token.address);
+      const response = await provider.call(contract.address, data);
 
       const decoded = decode(stringToBuffer(response));
 

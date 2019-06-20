@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { Configuration } from 'webpack';
 
 const configuration: Configuration = {

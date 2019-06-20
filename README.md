@@ -1,6 +1,6 @@
 # eth-scan
 
-`eth-scan` is a library written in TypeScript, to help you fetch Ether or (ERC-20) token balances for multiple addresses in an efficient way. The library uses a smart contract to fetch the balances in a single call to a node. The contract is currently deployed at [0x82Ea2E7834Bb0D6224dd6fd7125d44b83d6D6809](https://etherscan.io/address/0x82Ea2E7834Bb0D6224dd6fd7125d44b83d6D6809) on the Ethereum mainnet.
+`eth-scan` is a library written in TypeScript, to help you fetch Ether or (ERC-20) token balances for multiple addresses in an efficient way. The library uses a smart contract to fetch the balances in a single call to a node. The contract is currently deployed at [0x9faa157a8166a1a0db7da851da458d5c13855541](https://etherscan.io/address/0x9faa157a8166a1a0db7da851da458d5c13855541) on the Ethereum mainnet.
 
 It can use Web3.js, Ethers.js or regular HTTP as provider to get the balances. See [Getting Started](#getting-started) for more info.
 
@@ -11,13 +11,13 @@ It can use Web3.js, Ethers.js or regular HTTP as provider to get the balances. S
 The library is published on npm. To install it, use `npm` or `yarn`:
 
 ```
-yarn add eth-scan
+yarn add @mycrypto/eth-scan
 ```
 
 or
 
 ```
-npm install eth-scan
+npm install @mycrypto/eth-scan
 ```
 
 ## Example
@@ -70,13 +70,23 @@ Get Ether balances for `addresses`.
 
 * Returns: \<Promise\> - A promise with an object with the addresses and the balances.
 
-##### `getTokenBalances(token, addresses)`
+##### `getTokenBalances(addresses, token)`
 
 Get ERC-20 token balances from `token` for `addresses`. This does not check if the address specified is a token and will throw an error if it isn't.
 
+* `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+
 * `token` \<string\> - The address of the ERC-20 token.
 
-* `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+* Returns: \<Promise\> - A promise with an object with the addresses and the balances.
+
+##### `getTokensBalance(address, tokens)`
+
+Get ERC-20 token balances from `tokens` for `address`. If one of the token addresses specified is not a token, a balance of 0 will be used.
+
+* `address` \<string\> - The address to get token balances for.
+
+* `tokens` \<string[]\> - An array of ERC-20 token addresses.
 
 * Returns: \<Promise\> - A promise with an object with the addresses and the balances.
 
