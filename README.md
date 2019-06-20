@@ -11,13 +11,13 @@ It can use Web3.js, Ethers.js or regular HTTP as provider to get the balances. S
 The library is published on npm. To install it, use `npm` or `yarn`:
 
 ```
-yarn add eth-scan
+yarn add @mycrypto/eth-scan
 ```
 
 or
 
 ```
-npm install eth-scan
+npm install @mycrypto/eth-scan
 ```
 
 ## Example

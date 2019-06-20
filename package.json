@@ -1,5 +1,5 @@
 {
-  "name": "eth-scan",
+  "name": "@mycrypto/eth-scan",
   "version": "0.1.2",
   "description": "An efficient Ether and token balance scanner",
   "keywords": [
@@ -15,8 +15,9 @@
   "main": "dist/index.js",
   "types": "typings/index.d.ts",
   "repository": "https://github.com/Mrtenz/eth-scan.git",
-  "author": "Maarten Zuidhoorn <maarten@zuidhoorn.com>",
+  "author": "MyCrypto",
   "contributors": [
+    "Maarten Zuidhoorn <maarten@zuidhoorn.com>",
     "Luit Hollander <luit@hollander.email> (https://luit.me)"
   ],
   "license": "MIT",
