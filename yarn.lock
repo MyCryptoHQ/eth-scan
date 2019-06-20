@@ -6451,9 +6451,9 @@ trim-right@^1.0.1:
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
 
 truffle-hdwallet-provider@^1.0.9:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/truffle-hdwallet-provider/-/truffle-hdwallet-provider-1.0.10.tgz#74781ab328b7c41b505a5dc76249a4e75bc287a8"
-  integrity sha512-nP66WEuboye8lZblXhVaoCieubBxcCqQFpR8k1CsFq016iWDiPypPiqY8X4jdSTKNOJ8mfa4yOmQr9cGt20bzQ==
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/truffle-hdwallet-provider/-/truffle-hdwallet-provider-1.0.11.tgz#caa18fc0770068662dc00988578b2b1baaf2a764"
+  integrity sha512-4J+cB//8zGDWnsU5i6nSQG0BET2NkN+9TuraS61FkhSsYtYcDvKr23ZjvI44XzKnxvB2i8sMr+WGfzNDtZme0A==
   dependencies:
     any-promise "^1.3.0"
     bindings "^1.3.1"
