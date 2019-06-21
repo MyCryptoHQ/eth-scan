@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 /**
  * Split an array per `size` items.
  *
@@ -17,19 +19,19 @@ export const chunk = <T>(input: T[], size: number): T[][] => {
 /**
  * Batch the function calls to `handler` per `size` items.
  *
- * @param {(addresses: string[]) => Promise<bigint[]>} handler A function that takes a batch of addresses and returns the balance for the addresses.
+ * @param {(addresses: string[]) => Promise<BigNumber[]>} handler A function that takes a batch of addresses and returns the balance for the addresses.
  * @param {number} size The size of the batches.
  * @param {string[]} addresses The addresses to batch.
- * @return {Promise<bigint>} A promise with the balances.
+ * @return {Promise<BigNumber[]>} A promise with the balances.
  */
 export const batch = async (
-  handler: (addresses: string[]) => Promise<bigint[]>,
+  handler: (addresses: string[]) => Promise<BigNumber[]>,
   size: number,
   addresses: string[]
-): Promise<bigint[]> => {
+): Promise<BigNumber[]> => {
   const chunks = chunk(addresses, size);
 
-  return chunks.reduce<Promise<bigint[]>>(async (current, next) => {
+  return chunks.reduce<Promise<BigNumber[]>>(async (current, next) => {
     return Promise.resolve([...(await current), ...(await handler(next))]);
   }, Promise.resolve([]));
 };

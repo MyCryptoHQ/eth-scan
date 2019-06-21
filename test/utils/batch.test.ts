@@ -1,7 +1,7 @@
 import chai from 'chai';
 import spies from 'chai-spies';
 import { batch, chunk } from '../../src/utils';
-import { ETHER_BALANCES_ID } from '../../src/constants';
+import BigNumber from 'bignumber.js';
 
 chai.use(spies);
 
@@ -29,8 +29,8 @@ describe('utils/batch', () => {
   });
 
   describe('batch()', () => {
-    const handler = async (addresses: string[]): Promise<bigint[]> => {
-      return addresses.map(() => 1n);
+    const handler = async (addresses: string[]): Promise<BigNumber[]> => {
+      return addresses.map(() => new BigNumber(1));
     };
 
     it('should batch function calls', async () => {

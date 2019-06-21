@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@ethersproject/abi": "^5.0.0-beta.133",
+    "bignumber.js": "^9.0.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {

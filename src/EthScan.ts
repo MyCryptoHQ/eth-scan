@@ -9,12 +9,13 @@ import {
   TOKENS_BALANCE_ID,
   TOKENS_BALANCE_TYPE
 } from './constants';
+import BigNumber from 'bignumber.js';
 
 /**
- * An object that contains the address (key) and balance (value). The balance is a native bigint.
+ * An object that contains the address (key) and balance (value).
  */
 export interface BalanceMap {
-  [key: string]: bigint;
+  [key: string]: BigNumber;
 }
 
 export interface EthScanOptions {
@@ -117,7 +118,7 @@ export default class EthScan {
     return this.getBalances(tokenAddresses, balances);
   }
 
-  private getBalances(addresses: string[], balances: bigint[]): BalanceMap {
+  private getBalances(addresses: string[], balances: BigNumber[]): BalanceMap {
     return balances.reduce<BalanceMap>((current, next, index) => {
       return {
         ...current,
@@ -130,9 +131,9 @@ export default class EthScan {
    * Use the provider to call the contract.
    *
    * @param {string} data The hexadecimal input data to send.
-   * @return {Promise<bigint[]>} A Promise with an array of bigints.
+   * @return {Promise<BigNumber[]>} A Promise with an array of BigNumbers.
    */
-  private async call(data: string): Promise<bigint[]> {
+  private async call(data: string): Promise<BigNumber[]> {
     const response = await this.provider.call(
       this.options.contractAddress || CONTRACT_ADDRESS,
       data
