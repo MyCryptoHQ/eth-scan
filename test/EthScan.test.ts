@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import EthScan, { HttpProvider } from '../src';
+import BigNumber from 'bignumber.js';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
@@ -19,8 +20,8 @@ describe('EthScan', () => {
     const balances = await scanner.getEtherBalances(accounts);
 
     for (const account of accounts) {
-      const balance = BigInt(await web3.eth.getBalance(account));
-      expect(balance === balances[account]).to.equal(true);
+      const balance = new BigNumber(await web3.eth.getBalance(account));
+      expect(balance.isEqualTo(balances[account])).to.equal(true);
     }
   });
 
@@ -37,8 +38,8 @@ describe('EthScan', () => {
     const balances = await scanner.getTokenBalances(accounts, token.address);
 
     for (const account of accounts) {
-      const balance = BigInt(await web3.eth.getBalance(account));
-      expect(balance === balances[account]).to.equal(true);
+      const balance = new BigNumber(await web3.eth.getBalance(account));
+      expect(balance.isEqualTo(balances[account])).to.equal(true);
     }
   });
 
@@ -61,7 +62,11 @@ describe('EthScan', () => {
     expect(Object.keys(balances).length).to.equal(2);
     expect(Object.keys(balances)[0]).to.equal(token.address);
     expect(Object.keys(balances)[1]).to.equal(secondToken.address);
-    expect(balances[token.address]).to.equal(100000000000000000000n);
-    expect(balances[secondToken.address]).to.equal(100000000000000000000n);
+    expect(balances[token.address].isEqualTo(new BigNumber('100000000000000000000'))).to.equal(
+      true
+    );
+    expect(
+      balances[secondToken.address].isEqualTo(new BigNumber('100000000000000000000'))
+    ).to.equal(true);
   });
 });

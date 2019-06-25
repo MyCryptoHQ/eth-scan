@@ -48,8 +48,6 @@ Results in:
 }
 ```
 
-Note that this library uses the native JavaScript `BigInt` type, which [currently does not work in all browsers](https://caniuse.com/#feat=bigint). Use a polyfill if your application requires support for other browsers.
-
 ## API
 
 ### EthScan
