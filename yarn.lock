@@ -760,9 +760,9 @@
     "@ethersproject/errors" ">5.0.0-beta.0"
 
 "@ethersproject/providers@^5.0.0-beta.131":
-  version "5.0.0-beta.134"
-  resolved "https://registry.yarnpkg.com/@ethersproject/providers/-/providers-5.0.0-beta.134.tgz#953b9fb5f50c42c7fdef640ad853210c19ae16d5"
-  integrity sha512-pYRS8t/bC7R9HaEv8YztRVHPxlTTv+g9uRB6rZmt1ic/0kJueWPx2/x6+irNIFz+SdgfPJXr7UJ9GMyLcYv6Fw==
+  version "5.0.0-beta.135"
+  resolved "https://registry.yarnpkg.com/@ethersproject/providers/-/providers-5.0.0-beta.135.tgz#491d09da7806701972b0c51ff56615d1abe88c93"
+  integrity sha512-e3+T5HxrV4tBwlrrizflxRDPVRP7vBJ5PN+BV/iS5kTXgh8VZv8Lfw7yo1PoBsmRt2Olz2GGdgABVg5O6ZyjXA==
   dependencies:
     "@ethersproject/abstract-provider" ">5.0.0-beta.0"
     "@ethersproject/abstract-signer" ">5.0.0-beta.0"
