@@ -1,2 +1,2 @@
 export * from './providers';
-export { default } from './EthScan';
+export { default, BalanceMap, EthScanOptions } from './EthScan';
