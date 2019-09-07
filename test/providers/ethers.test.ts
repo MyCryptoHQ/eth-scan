@@ -8,6 +8,7 @@ import {
   TOKEN_BALANCES_ID,
   TOKEN_BALANCES_TYPE
 } from '../../src/constants';
+import BigNumber from 'bignumber.js';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
@@ -29,9 +30,8 @@ describe('providers/ethers', () => {
       const decoded = decode(stringToBuffer(response));
 
       for (let i = 0; i < accounts.length; i++) {
-        const balance = BigInt(await web3.eth.getBalance(accounts[i]));
-        // Chai doesn't like bigints yet
-        expect(balance === decoded[i]).to.equal(true);
+        const balance = new BigNumber(await web3.eth.getBalance(accounts[i]));
+        expect(balance.isEqualTo(decoded[i])).to.equal(true);
       }
     });
 
@@ -46,7 +46,7 @@ describe('providers/ethers', () => {
       const decoded = decode(stringToBuffer(response));
 
       for (let i = 0; i < accounts.length; i++) {
-        expect(decoded[i] === 100000000000000000000n).to.equal(true);
+        expect(decoded[i].isEqualTo(new BigNumber('100000000000000000000'))).to.equal(true);
       }
     });
   });

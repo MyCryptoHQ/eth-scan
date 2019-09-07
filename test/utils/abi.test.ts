@@ -6,6 +6,7 @@ import {
   TOKEN_BALANCES_ID,
   TOKEN_BALANCES_TYPE
 } from '../../src/constants';
+import BigNumber from 'bignumber.js';
 
 describe('utils/abi', () => {
   describe('decode()', () => {
@@ -20,7 +21,7 @@ describe('utils/abi', () => {
       const decoded = decode(encoded);
 
       expect(decoded.length).to.equal(1);
-      expect(decoded[0]).to.equal(100000000000000000000n);
+      expect(decoded[0].isEqualTo(new BigNumber('100000000000000000000'))).to.equal(true);
     });
   });
 

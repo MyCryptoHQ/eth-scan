@@ -48,8 +48,6 @@ Results in:
 }
 ```
 
-Note that this library uses the native JavaScript `BigInt` type, which [currently does not work in all browsers](https://caniuse.com/#feat=bigint). Use a polyfill if your application requires support for other browsers.
-
 ## API
 
 ### EthScan
@@ -92,7 +90,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 #### `EthScanOptions`
 
-* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x82Ea2E7834Bb0D6224dd6fd7125d44b83d6D6809](https://etherscan.io/address/0x82Ea2E7834Bb0D6224dd6fd7125d44b83d6D6809).
+* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x9faa157a8166a1a0db7da851da458d5c13855541](https://etherscan.io/address/0x9faa157a8166a1a0db7da851da458d5c13855541).
 
 * `batchSize` \<number\> (optional) - The size of the call batches. Defaults to 1000.
 
