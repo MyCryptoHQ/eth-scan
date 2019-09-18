@@ -29,12 +29,16 @@ export default class Web3Provider extends Provider {
    * @return {Promise<string>} A Promise with the response data.
    */
   public async call(address: string, data: string): Promise<string> {
-    return await this.web3.currentProvider.send('eth_call', [
-      {
-        to: address,
-        data
-      },
-      'latest'
-    ]);
+    try {
+      return await this.web3.currentProvider.send('eth_call', [
+        {
+          to: address,
+          data
+        },
+        'latest'
+      ]);
+    } catch (error) {
+      throw new Error(`Contract call failed: ${error.message}`);
+    }
   }
 }

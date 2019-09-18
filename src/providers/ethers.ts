@@ -37,6 +37,10 @@ export default class EthersProvider extends Provider {
       data
     };
 
-    return this.provider.call(transaction, 'latest');
+    try {
+      return await this.provider.call(transaction, 'latest');
+    } catch (error) {
+      throw new Error(`Contract call failed: ${error.message}`);
+    }
   }
 }
