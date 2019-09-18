@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = '0x9faa157a8166a1a0db7da851da458d5c13855541';
+export const CONTRACT_ADDRESS = '0xbb4AAaF8cAA1A575B43E7673e5b155C1c5A8BC13';
 
 /**
  * tokenBalances(address[],address)

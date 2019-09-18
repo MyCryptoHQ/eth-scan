@@ -20,7 +20,7 @@ export interface BalanceMap {
 
 export interface EthScanOptions {
   /**
-   * The address of the contract to use. Defaults to 0x82Ea2E7834Bb0D6224dd6fd7125d44b83d6D6809.
+   * The address of the contract to use. Defaults to 0xbb4AAaF8cAA1A575B43E7673e5b155C1c5A8BC13.
    */
   contractAddress: string;
 
