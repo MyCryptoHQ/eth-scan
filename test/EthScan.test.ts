@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
+const InvalidToken = artifacts.require('InvalidToken');
 
 const LOCAL_PROVIDER = web3.currentProvider.host;
 
@@ -68,5 +69,29 @@ describe('EthScan', () => {
     expect(
       balances[secondToken.address].isEqualTo(new BigNumber('100000000000000000000'))
     ).to.equal(true);
+  });
+
+  it('should not throw on invalid contracts or non-contract addresses', async () => {
+    const contract = await BalanceScanner.deployed();
+    const token = await FixedBalanceToken.new();
+    const invalidToken = await InvalidToken.new();
+    const accounts = await web3.eth.getAccounts();
+
+    const scanner = new EthScan(new HttpProvider(LOCAL_PROVIDER), {
+      contractAddress: contract.address
+    });
+
+    const balances = await scanner.getTokensBalance(accounts[0], [
+      token.address,
+      invalidToken.address,
+      accounts[0]
+    ]);
+
+    expect(Object.keys(balances).length).to.equal(3);
+    expect(balances[token.address].isEqualTo(new BigNumber('100000000000000000000'))).to.equal(
+      true
+    );
+    expect(balances[invalidToken.address].isEqualTo(new BigNumber('0'))).to.equal(true);
+    expect(balances[accounts[0]].isEqualTo(new BigNumber('0'))).to.equal(true);
   });
 });

@@ -1,13 +1,6 @@
 pragma solidity 0.5.1;
 
 /**
- * @title Partial ERC-20 token interface
- */
-contract Token {
-  function balanceOf(address) public view returns (uint256);
-}
-
-/**
  * @title An Ether or token balance scanner
  * @author Maarten Zuidhoorn
  * @author Luit Hollander
@@ -33,12 +26,11 @@ contract BalanceScanner {
    * @param token The address of the ERC-20 token contract
    * @return The token balance for all addresses in the same order as specified
    */
-  function tokenBalances(address[] calldata addresses, address token) external view returns (uint256[] memory balances) {
+  function tokenBalances(address[] calldata addresses, address token) external returns (uint256[] memory balances) {
     balances = new uint256[](addresses.length);
-    Token tokenContract = Token(token);
 
     for (uint256 i = 0; i < addresses.length; i++) {
-      balances[i] = tokenContract.balanceOf(addresses[i]);
+      balances[i] = tokenBalance(addresses[i], token);
     }
   }
 
@@ -48,17 +40,29 @@ contract BalanceScanner {
     * @param contracts The addresses of the ERC-20 token contracts
     * @return The token balances in the same order as specified
    */
-  function tokensBalance(address owner, address[] calldata contracts) external view returns (uint256[] memory balances) {
+  function tokensBalance(address owner, address[] calldata contracts) external returns (uint256[] memory balances) {
     balances = new uint256[](contracts.length);
 
-    for(uint256 i = 0; i < contracts.length; i++) {
-      uint256 size = codeSize(contracts[i]);
+    for (uint256 i = 0; i < contracts.length; i++) {
+      balances[i] = tokenBalance(owner, contracts[i]);
+    }
+  }
 
-      if(size == 0) {
-        balances[i] = 0;
-      } else {
-        Token tokenContract = Token(contracts[i]);
-        balances[i] = tokenContract.balanceOf(owner);
+  /**
+    * @notice Get the ERC-20 token balance for a single contract
+    * @param owner The address of the token owner
+    * @param token The address of the ERC-20 token contract
+    * @return The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
+      function
+  */
+  function tokenBalance(address owner, address token) internal returns (uint256 balance) {
+    balance = 0;
+    uint256 size = codeSize(token);
+
+    if (size > 0) {
+      (bool success, bytes memory data) = token.call(abi.encodeWithSelector(bytes4(0x70a08231), owner));
+      if (success) {
+        (balance) = abi.decode(data, (uint256));
       }
     }
   }
