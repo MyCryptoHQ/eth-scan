@@ -10,7 +10,7 @@ contract FixedBalanceToken {
    * @dev This function always returns the same value, regardless of the address provided
    * @return A fixed value of 100000000000000000000
    */
-  function balanceOf(address who) public pure returns (uint balance) {
+  function balanceOf(address who) public pure returns (uint) {
     return 100000000000000000000;
   }
 }

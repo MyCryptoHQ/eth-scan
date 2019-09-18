@@ -28,6 +28,11 @@ export interface JsonRpcResult<T> {
   id: number;
   jsonrpc: string;
   result: T;
+  error?: {
+    code: number;
+    message: string;
+    data: string;
+  };
 }
 
 /**
@@ -67,6 +72,10 @@ export default class HttpProvider extends Provider {
     });
 
     const response: JsonRpcResult<string> = await body.json();
+
+    if (response.error) {
+      throw new Error(`Contract call failed: ${response.error.message}`);
+    }
 
     return response.result;
   }
