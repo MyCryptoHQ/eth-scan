@@ -66,6 +66,10 @@ export default class HttpProvider extends Provider {
 
     const body = await fetch(this.url, {
       method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: json,
       cache: 'no-cache',
       ...this.params
