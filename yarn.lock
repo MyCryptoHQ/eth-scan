@@ -906,9 +906,9 @@
     "@types/node" "*"
 
 "@types/chai-spies@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.0.tgz#1442daa924d2a8c3f20253db5e5e8fdd1fd4f229"
-  integrity sha512-Bj/froHomMnlAPEYEeqhmSuNSjTWW/VuSvCVdhLdcb67+dy4ffjTR6fC0YYw9tHP6KR3U8fkF1mgzmzlChHc5Q==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/chai-spies/-/chai-spies-1.0.1.tgz#d98ac6027749b1039fea9e5cf4762720bf8096d1"
+  integrity sha512-vvlTzisMpzmPZaKDd0pFybCJB5bzx398JEdPsVD9Rwq4a7dcGSUDlNG2PAVhsanRBPl4hezqnlaFtL1/YwBGgw==
   dependencies:
     "@types/chai" "*"
 
