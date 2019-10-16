@@ -1,8 +1,10 @@
 import { join, resolve } from 'path';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import { Configuration } from 'webpack';
+import webpackNodeExternals from 'webpack-node-externals';
 
 const configuration: Configuration = {
+  target: 'node',
   mode: 'production',
   entry: resolve(__dirname, 'src/index.ts'),
   output: {
@@ -14,6 +16,7 @@ const configuration: Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
+  externals: [webpackNodeExternals()],
   optimization: {
     sideEffects: true
   },
