@@ -59,6 +59,7 @@
     "@types/webpack": "^4.4.32",
     "@types/webpack-env": "^1.13.9",
     "@types/webpack-merge": "^4.1.5",
+    "@types/webpack-node-externals": "^1.6.3",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "chai-spies": "^1.0.0",
@@ -81,7 +82,8 @@
     "web3": "^1.0.0-beta.55",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "lint-staged": {
     "*.ts": [

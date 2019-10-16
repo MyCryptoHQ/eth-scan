@@ -1017,6 +1017,13 @@
   dependencies:
     "@types/webpack" "*"
 
+"@types/webpack-node-externals@^1.6.3":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@types/webpack-node-externals/-/webpack-node-externals-1.6.3.tgz#a70ecab38339ab219d0090680c98c4973a90af01"
+  integrity sha512-sIYCMSV4Z1FbxqSKKvhmEnjd1UoZnTBT0VIhoZ0iT8gck7FB1MzJ1eH+yFyOgY65WU4LJBTxj3ySMKKfzfEiCw==
+  dependencies:
+    "@types/webpack" "*"
+
 "@types/webpack-sources@*":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@types/webpack-sources/-/webpack-sources-0.1.5.tgz#be47c10f783d3d6efe1471ff7f042611bd464a92"
@@ -7465,6 +7472,11 @@ webpack-merge@^4.2.1:
   integrity sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==
   dependencies:
     lodash "^4.17.15"
+
+webpack-node-externals@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/webpack-node-externals/-/webpack-node-externals-1.7.2.tgz#6e1ee79ac67c070402ba700ef033a9b8d52ac4e3"
+  integrity sha512-ajerHZ+BJKeCLviLUUmnyd5B4RavLF76uv3cs6KNuO8W+HuQaEs0y0L7o40NQxdPy5w0pcv8Ew7yPUAQG0UdCg==
 
 webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   version "1.4.3"
