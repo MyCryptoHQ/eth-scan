@@ -12,9 +12,9 @@
     "ethers.js",
     "smart-contract"
   ],
-  "main": "dist/index.js",
-  "types": "typings/index.d.ts",
-  "repository": "https://github.com/Mrtenz/eth-scan.git",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "https://github.com/MyCryptoHQ/eth-scan.git",
   "author": "MyCrypto",
   "contributors": [
     "Maarten Zuidhoorn <maarten@zuidhoorn.com>",
