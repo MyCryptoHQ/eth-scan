@@ -1,14 +1,23 @@
 {
   "presets": [
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-nullish-coalescing-operator",
+    "@babel/plugin-proposal-optional-chaining",
     [
-      "@babel/preset-env",
+      "@babel/plugin-transform-runtime",
       {
-        "useBuiltIns": "entry",
-        "corejs": 3
+        "useESModules": true,
+        "version": "^7.7.6"
       }
     ]
   ],
-  "plugins": [
-    "@babel/plugin-transform-typescript"
-  ]
+  "env": {
+    "test": {
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    }
+  }
 }
