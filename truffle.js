@@ -1,7 +1,9 @@
-const { register } = require('ts-node');
-register({ files: true });
+const register = require('@babel/register');
+register({
+  extensions: ['.ts']
+});
 
-const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 const MNEMONIC_PHRASE = process.env.SECRET;
 const INFURA_PROJECT_ID = 'bfea47cc97c440a687c8762553739a94';

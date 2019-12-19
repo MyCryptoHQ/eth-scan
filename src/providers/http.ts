@@ -1,5 +1,5 @@
 import Provider from './provider';
-import 'isomorphic-fetch';
+import 'isomorphic-unfetch';
 
 /**
  * Get the JSON-RPC payload for the `eth_call` function.
