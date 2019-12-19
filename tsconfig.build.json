@@ -12,7 +12,7 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "./typings/"
+    "declarationDir": "./lib/"
   },
   "include": [
     "./src/**/*"
