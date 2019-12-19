@@ -1,4 +1,5 @@
-import Provider from './provider';
+import { HttpProviderLike } from './http';
+import { stringToBuffer } from '../utils';
 
 type BlockTag = string | number;
 
@@ -12,35 +13,36 @@ export interface EthersProviderLike {
 }
 
 /**
- * A provider that uses Ethers.js to send calls.
+ * Check if an object is a valid EthersProviderLike object.
+ *
+ * @param {any} provider
+ * @return {boolean}
  */
-export default class EthersProvider extends Provider {
-  /**
-   * Create an instance of the EthersProvider class.
-   *
-   * @param {EthersProviderLike} provider Any supported Ethers.js provider.
-   */
-  public constructor(public readonly provider: EthersProviderLike) {
-    super();
-  }
+export const isEthersProvider = (provider: unknown): provider is EthersProviderLike => {
+  return (provider as EthersProviderLike)?.call !== undefined;
+};
 
-  /**
-   * Wrapper function for `eth_call`.
-   *
-   * @param {string} address The address to send the call to.
-   * @param {string} data The data for the transaction.
-   * @return {Promise<string>} A Promise with the response data.
-   */
-  public async call(address: string, data: string): Promise<string> {
-    const transaction = {
-      to: address,
-      data
-    };
+/**
+ * Call the contract with an Ethers provider. This throws an error if the call failed.
+ *
+ * @param {HttpProviderLike} provider
+ * @param {string} contractAddress
+ * @param {string} data
+ * @return {Promise<Buffer>}
+ */
+export const callWithEthers = async (
+  provider: EthersProviderLike,
+  contractAddress: string,
+  data: string
+): Promise<Buffer> => {
+  const transaction: TransactionRequest = {
+    to: contractAddress,
+    data
+  };
 
-    try {
-      return await this.provider.call(transaction, 'latest');
-    } catch (error) {
-      throw new Error(`Contract call failed: ${error.message}`);
-    }
+  try {
+    return stringToBuffer(await provider.call(transaction, 'latest'));
+  } catch (error) {
+    throw new Error(`Contract call failed: ${error.message ?? error.toString()}`);
   }
-}
+};
