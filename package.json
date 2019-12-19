@@ -12,8 +12,8 @@
     "ethers.js",
     "smart-contract"
   ],
-  "main": "dist/index.js",
-  "types": "typings/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/Mrtenz/eth-scan.git",
   "author": "MyCrypto",
   "contributors": [
