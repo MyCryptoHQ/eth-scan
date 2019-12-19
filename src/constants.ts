@@ -1,4 +1,5 @@
 export const CONTRACT_ADDRESS = '0xbb4AAaF8cAA1A575B43E7673e5b155C1c5A8BC13';
+export const BATCH_SIZE = 1000;
 
 /**
  * tokenBalances(address[],address)
