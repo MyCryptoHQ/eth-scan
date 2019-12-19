@@ -23,11 +23,9 @@ npm install @mycrypto/eth-scan
 ## Example
 
 ```typescript
-import EthScan, { HttpProvider } from 'eth-scan';
+import { getEtherBalances } from 'eth-scan';
 
-const scanner = new EthScan(new HttpProvider('http://127.0.0.1:8545'));
-
-scanner.getEtherBalances([
+getEtherBalances('http://127.0.0.1:8545', [
   '0x9a0decaffb07fb500ff7e5d253b16892dbec006a',
   '0xeb65f72a2f5464157288ac15f1bb56c56e6be375',
   '0x1b96c634f9e9fcfb76932e165984901701352ffd',
@@ -50,72 +48,60 @@ Results in:
 
 ## API
 
-### EthScan
-
-#### `new EthScan(provider, options?)`
-
-The main class used to get Ether or token balances.
-
-* `provider` \<[Provider](#providers)\> - An instance of the Web3.js, Ethers.js or HTTP provider class.
-
-* `options` \<[EthScanOptions](#ethscanoptions)\> (optional) - The options to use.
-
-##### `getEtherBalances(addresses)`
+### `getEtherBalances(provider, addresses, options)`
 
 Get Ether balances for `addresses`.
 
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+
 * `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+
+* `options` \<[EthScanOptions](#ethscanoptions)\> (optional) - The options to use.
 
 * Returns: \<Promise<[BalanceMap](#balancemap)>\> - A promise with an object with the addresses and the balances.
 
-##### `getTokenBalances(addresses, token)`
+### `getTokenBalances(provider, addresses, token, options)`
 
 Get ERC-20 token balances from `token` for `addresses`. This does not check if the address specified is a token and will throw an error if it isn't.
+
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
 
 * `addresses` \<string[]\> - An array of addresses as hexadecimal string.
 
 * `token` \<string\> - The address of the ERC-20 token.
 
+* `options` \<[EthScanOptions](#ethscanoptions)\> (optional) - The options to use.
+
 * Returns: \<Promise<[BalanceMap](#balancemap)>\> - A promise with an object with the addresses and the balances.
 
-##### `getTokensBalance(address, tokens)`
+### `getTokensBalance(provider, address, tokens, options)`
 
 Get ERC-20 token balances from `tokens` for `address`. If one of the token addresses specified is not a token, a balance of 0 will be used.
+
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
 
 * `address` \<string\> - The address to get token balances for.
 
 * `tokens` \<string[]\> - An array of ERC-20 token addresses.
 
+* `options` \<[EthScanOptions](#ethscanoptions)\> (optional) - The options to use.
+
 * Returns: \<Promise<[BalanceMap](#balancemap)>\> - A promise with an object with the addresses and the balances.
 
-#### `EthScanOptions`
+### `EthScanOptions`
 
 * `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x9faa157a8166a1a0db7da851da458d5c13855541](https://etherscan.io/address/0x9faa157a8166a1a0db7da851da458d5c13855541).
 
 * `batchSize` \<number\> (optional) - The size of the call batches. Defaults to 1000.
 
-#### `BalanceMap`
+### `BalanceMap`
 
 A `BalanceMap` is an object with an address as key and a [BigNumber](https://github.com/MikeMcl/bignumber.js/) as value.
 
 ### Providers
 
-There are currently three available providers.
+Currently, `eth-scan` has support for three different providers:
 
-#### `new EthersProvider(provider)`
-
-Create a provider from an existing Ethers.js provider.
-
-* `provider` \<Provider\> - An instance of an Ethers.js provider.
-
-#### `new HttpProvider(url)`
-
-Create a provider that uses a simple HTTP request.
-
-* `url` \<string\> - The URL of the node to connect to.
-
-#### `new Web3Provider(web3)`
-
-Create a provider from an existing Web3.js instance.
-
-* `web3` \<Web3\> - An instance of the Web3 class.
+* Ethers.js, by using an existing Ethers.js provider
+* Web3, by using an instance of the `Web3` class
+* HTTP, by using a URL of a JSONRPC endpoint as string
