@@ -47,7 +47,6 @@
     "lint:tslint": "tslint --project ."
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.6",
     "@ethersproject/abi": "^5.0.0-beta.142",
     "@ethersproject/bignumber": "^5.0.0-beta.135",
     "isomorphic-unfetch": "^3.0.0"
