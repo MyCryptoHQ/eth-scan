@@ -1,18 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./src/",
-    "sourceMap": true,
-    "strictNullChecks": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "commonjs",
-    "target": "esnext",
-    "noEmitOnError": true,
-    "strict": true,
-    "esModuleInterop": true,
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "./lib/"
+    "declarationDir": "./typings/"
   },
   "include": [
     "./src/**/*"
