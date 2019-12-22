@@ -96,7 +96,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ### `BalanceMap`
 
-A `BalanceMap` is an object with an address as key and a [BigNumber](https://github.com/MikeMcl/bignumber.js/) as value.
+A `BalanceMap` is an object with an address as key and a [BigNumber](https://github.com/ethers-io/ethers.js/tree/ethers-v5-beta/packages/bignumber) as value.
 
 ### Providers
 
@@ -105,3 +105,9 @@ Currently, `eth-scan` has support for three different providers:
 * Ethers.js, by using an existing Ethers.js provider
 * Web3, by using an instance of the `Web3` class
 * HTTP, by using a URL of a JSONRPC endpoint as string
+
+## Compatiblity
+
+`eth-scan` uses ES6+ functionality, which may not be supported on all platforms. If you need compatibility with older browsers or Node.js versions, you can use something like [Babel](https://github.com/babel/babel).
+
+There is an ES compatible version available, which should work with module bundlers like [Webpack](https://webpack.js.org/) and [Rollup](https://github.com/rollup/rollup).
