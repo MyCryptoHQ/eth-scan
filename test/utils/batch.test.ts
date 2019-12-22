@@ -1,7 +1,7 @@
 import chai from 'chai';
 import spies from 'chai-spies';
+import { BigNumber } from '@ethersproject/bignumber';
 import { batch, chunk } from '../../src/utils';
-import BigNumber from 'bignumber.js';
 
 chai.use(spies);
 
@@ -30,7 +30,7 @@ describe('utils/batch', () => {
 
   describe('batch()', () => {
     const handler = async (addresses: string[]): Promise<BigNumber[]> => {
-      return addresses.map(() => new BigNumber(1));
+      return addresses.map(() => BigNumber.from(1));
     };
 
     it('should batch function calls', async () => {

@@ -23,8 +23,7 @@
   "license": "MIT",
   "files": [
     "lib",
-    "src",
-    "typings"
+    "src"
   ],
   "sideEffects": false,
   "scripts": {
@@ -45,8 +44,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.7.6",
-    "@ethersproject/abi": "^5.0.0-beta.133",
-    "bignumber.js": "^9.0.0",
+    "@ethersproject/abi": "^5.0.0-beta.142",
+    "@ethersproject/bignumber": "^5.0.0-beta.135",
     "isomorphic-unfetch": "^3.0.0"
   },
   "devDependencies": {
