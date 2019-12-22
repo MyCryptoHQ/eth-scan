@@ -1,27 +1,35 @@
 {
   "presets": [
-    "@babel/preset-typescript",
-    [
-      "@babel/preset-env",
-      {
-        "modules": "commonjs"
-      }
-    ]
+    "@babel/preset-typescript"
   ],
   "plugins": [
     "@babel/plugin-proposal-nullish-coalescing-operator",
-    "@babel/plugin-proposal-optional-chaining",
-    [
-      "@babel/plugin-transform-runtime",
-      {
-        "version": "^7.7.6"
-      }
-    ]
+    "@babel/plugin-proposal-optional-chaining"
   ],
   "env": {
-    "production": {
+    "cjs": {
       "presets": [
         "babel-preset-minify"
+      ],
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+    "es": {
+      "presets": [
+        "babel-preset-minify"
+      ]
+    },
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
       ]
     }
   }
