@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import { batch, decode, encodeWithId } from './utils';
 import {
   BATCH_SIZE,
@@ -9,7 +10,6 @@ import {
   TOKENS_BALANCE_ID,
   TOKENS_BALANCE_TYPE
 } from './constants';
-import BigNumber from 'bignumber.js';
 import { call, ProviderLike } from './providers';
 
 /**

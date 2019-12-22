@@ -1,5 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
 
@@ -12,7 +12,7 @@ const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
 export const decode = (data: Buffer): BigNumber[] => {
   const balances: BigNumber[] = [];
   for (let i = 64; i < data.length; i += 32) {
-    balances.push(new BigNumber(bufferToString(data.subarray(i, i + 32))));
+    balances.push(BigNumber.from(bufferToString(data.subarray(i, i + 32))));
   }
   return balances;
 };

@@ -1,4 +1,4 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from '@ethersproject/bignumber';
 
 /**
  * Split an array per `size` items.

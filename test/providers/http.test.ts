@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { BigNumber } from '@ethersproject/bignumber';
 import { callWithHttp, getPayload } from '../../src';
 import { decode, encodeWithId } from '../../src/utils';
 import {
@@ -7,7 +8,6 @@ import {
   TOKEN_BALANCES_ID,
   TOKEN_BALANCES_TYPE
 } from '../../src/constants';
-import BigNumber from 'bignumber.js';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
@@ -38,8 +38,8 @@ describe('providers/http', () => {
       const decoded = decode(response);
 
       for (let i = 0; i < accounts.length; i++) {
-        const balance = new BigNumber(await web3.eth.getBalance(accounts[i]));
-        expect(balance.isEqualTo(decoded[i])).to.equal(true);
+        const balance = BigNumber.from(await web3.eth.getBalance(accounts[i]));
+        expect(balance.eq(decoded[i])).to.equal(true);
       }
     });
 
@@ -54,7 +54,7 @@ describe('providers/http', () => {
       const decoded = decode(response);
 
       for (let i = 0; i < accounts.length; i++) {
-        expect(decoded[i].isEqualTo(new BigNumber('100000000000000000000'))).to.equal(true);
+        expect(decoded[i].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
       }
     });
   });
