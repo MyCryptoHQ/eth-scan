@@ -24,7 +24,8 @@
   "license": "MIT",
   "files": [
     "lib",
-    "src"
+    "src",
+    "typings"
   ],
   "sideEffects": false,
   "scripts": {
