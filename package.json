@@ -1,6 +1,6 @@
 {
   "name": "@mycrypto/eth-scan",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "An efficient Ether and token balance scanner",
   "keywords": [
     "ethereum",
