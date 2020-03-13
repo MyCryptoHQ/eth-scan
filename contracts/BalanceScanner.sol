@@ -1,4 +1,5 @@
 pragma solidity 0.6.4;
+pragma experimental ABIEncoderV2;
 
 /**
  * @title An Ether or token balance scanner
@@ -35,10 +36,25 @@ contract BalanceScanner {
   }
 
   /**
+   * @notice Get the ERC-20 token balances for multiple contracts, for multiple addresses
+   * @dev This does not check if the `token` address specified is actually an ERC-20 token
+   * @param addresses The addresses to get the token balances for
+   * @param contracts The addresses of the ERC-20 token contracts
+   * @return balances The token balances in the same order as the addresses specified
+   */
+  function tokensBalances(address[] calldata addresses, address[] calldata contracts) external returns (uint256[][] memory balances) {
+    balances = new uint256[][](addresses.length);
+
+    for (uint256 i = 0; i < addresses.length; i++) {
+      balances[i] = this.tokensBalance(addresses[i], contracts);
+    }
+  }
+
+  /**
     * @notice Get the ERC-20 token balance from multiple contracts for a single owner
     * @param owner The address of the token owner
     * @param contracts The addresses of the ERC-20 token contracts
-    * @return balances The token balances in the same order as specified
+    * @return balances The token balances in the same order as the addresses specified
    */
   function tokensBalance(address owner, address[] calldata contracts) external returns (uint256[] memory balances) {
     balances = new uint256[](contracts.length);
