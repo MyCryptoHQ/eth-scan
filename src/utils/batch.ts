@@ -24,14 +24,14 @@ export const chunk = <T>(input: T[], size: number): T[][] => {
  * @param {string[]} addresses The addresses to batch.
  * @return {Promise<BigNumber[]>} A promise with the balances.
  */
-export const batch = async (
-  handler: (addresses: string[]) => Promise<BigNumber[]>,
+export const batch = async <T = BigNumber>(
+  handler: (addresses: string[]) => Promise<T[]>,
   size: number,
   addresses: string[]
-): Promise<BigNumber[]> => {
+): Promise<T[]> => {
   const chunks = chunk(addresses, size);
 
-  return chunks.reduce<Promise<BigNumber[]>>(async (current, next) => {
+  return chunks.reduce<Promise<T[]>>(async (current, next) => {
     return Promise.resolve([...(await current), ...(await handler(next))]);
-  }, Promise.resolve([]));
+  }, Promise.resolve<T[]>([]));
 };

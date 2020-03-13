@@ -22,7 +22,7 @@ describe('providers/web3', () => {
       const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, accounts);
       const response = await callWithWeb3((web3 as unknown) as Web3ProviderLike, address, data);
 
-      const decoded = decode(response);
+      const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
         const balance = BigNumber.from(await web3.eth.getBalance(accounts[i]));
@@ -38,7 +38,7 @@ describe('providers/web3', () => {
       const data = encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, accounts, token.address);
       const response = await callWithWeb3((web3 as unknown) as Web3ProviderLike, address, data);
 
-      const decoded = decode(response);
+      const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
         expect(decoded[i].eq(BigNumber.from('100000000000000000000'))).to.equal(true);

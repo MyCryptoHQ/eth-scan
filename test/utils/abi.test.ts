@@ -18,7 +18,7 @@ describe('utils/abi', () => {
           '0000000000000000000000000000000000000000000000056bc75e2d63100000'
       );
 
-      const decoded = decode(encoded);
+      const decoded = decode<[BigNumber[]]>(['uint256[]'], encoded)[0];
 
       expect(decoded.length).to.equal(1);
       expect(decoded[0].eq(BigNumber.from('100000000000000000000'))).to.equal(true);

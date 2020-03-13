@@ -8,15 +8,17 @@ import {
   TOKEN_BALANCES_ID,
   TOKEN_BALANCES_TYPE,
   TOKENS_BALANCE_ID,
-  TOKENS_BALANCE_TYPE
+  TOKENS_BALANCE_TYPE,
+  TOKENS_BALANCES_ID,
+  TOKENS_BALANCES_TYPE
 } from './constants';
 import { call, ProviderLike } from './providers';
 
 /**
- * An object that contains the address (key) and balance (value).
+ * An object that contains the address (key) and balance or balance (value).
  */
-export interface BalanceMap {
-  [key: string]: BigNumber;
+export interface BalanceMap<T = BigNumber> {
+  [key: string]: T;
 }
 
 export interface EthScanOptions {
@@ -52,7 +54,7 @@ export const getEtherBalances = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, batchedAddresses);
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -89,13 +91,53 @@ export const getTokenBalances = async (
         tokenAddress
       );
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
   );
 
   return toBalanceMap(addresses, balances);
+};
+
+/**
+ * Get the ERC-20 token balances for multiple contracts, for multiple addresses. Note that this may fail if there are
+ * too many addresses or tokens, and the batch size is too large.
+ *
+ * @param {ProviderLike} provider
+ * @param {string[]} addresses
+ * @param {string[]} tokenAddresses
+ * @param {EthScanOptions} options
+ * @return {Promise<BalanceMap<BalanceMap>>}
+ */
+export const getTokensBalances = async (
+  provider: ProviderLike,
+  addresses: string[],
+  tokenAddresses: string[],
+  options?: EthScanOptions
+): Promise<BalanceMap<BalanceMap>> => {
+  const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
+  const batchSize = options?.batchSize ?? BATCH_SIZE;
+
+  const balances = await batch<BigNumber[]>(
+    async (batchedAddresses: string[]) => {
+      const data = encodeWithId(
+        TOKENS_BALANCES_ID,
+        TOKENS_BALANCES_TYPE,
+        batchedAddresses,
+        tokenAddresses
+      );
+
+      return decode<[BigNumber[][]]>(
+        ['uint256[][]'],
+        await call(provider, contractAddress, data)
+      )[0];
+    },
+    batchSize,
+    addresses
+  );
+
+  return toNestedBalanceMap(addresses, tokenAddresses, balances);
 };
 
 /**
@@ -121,7 +163,7 @@ export const getTokensBalance = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(TOKENS_BALANCE_ID, TOKENS_BALANCE_TYPE, address, batchedAddresses);
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     tokenAddresses
@@ -142,6 +184,26 @@ export const toBalanceMap = (addresses: string[], balances: BigNumber[]): Balanc
     return {
       ...current,
       [addresses[index]]: next
+    };
+  }, {});
+};
+
+/**
+ * Get a nested balance map from an array of addresses, token addresses, and balances.
+ *
+ * @param {string[]} addresses
+ * @param {BigNumber[]} tokenAddresses
+ * @param {BalanceMap<BalanceMap>} balances
+ */
+export const toNestedBalanceMap = (
+  addresses: string[],
+  tokenAddresses: string[],
+  balances: BigNumber[][]
+): BalanceMap<BalanceMap> => {
+  return balances.reduce<BalanceMap<BalanceMap>>((current, next, index) => {
+    return {
+      ...current,
+      [addresses[index]]: toBalanceMap(tokenAddresses, next)
     };
   }, {});
 };
