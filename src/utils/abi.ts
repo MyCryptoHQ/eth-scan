@@ -37,7 +37,8 @@ export const encode = (types: string[], ...args: any[]): string => {
  * @template T
  */
 export const decode = <T>(types: string[], data: Buffer): T => {
-  return defaultAbiCoder.decode(types, data);
+  // TODO: See if there's a better way to type this
+  return (defaultAbiCoder.decode(types, data) as unknown) as T;
 };
 
 /**

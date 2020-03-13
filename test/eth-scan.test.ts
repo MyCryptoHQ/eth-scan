@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { BigNumber } from '@ethersproject/bignumber';
-import { getEtherBalances, getTokenBalances, getTokensBalance } from '../src';
+import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from '../src';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
 const FixedBalanceToken = artifacts.require('FixedBalanceToken');
@@ -35,6 +35,35 @@ describe('eth-scan', () => {
     for (const account of accounts) {
       const balance = BigNumber.from(await web3.eth.getBalance(account));
       expect(balance.eq(balances[account])).to.equal(true);
+    }
+  });
+
+  it('should get multiple token balances for multiple addresses from the contract', async () => {
+    const { address: contractAddress } = await BalanceScanner.deployed();
+    const token = await FixedBalanceToken.new();
+    const secondToken = await FixedBalanceToken.new();
+    const accounts = await web3.eth.getAccounts();
+    accounts.shift();
+
+    const balances = await getTokensBalances(
+      LOCAL_PROVIDER,
+      accounts,
+      [token.address, secondToken.address],
+      {
+        contractAddress
+      }
+    );
+
+    for (const account of accounts) {
+      expect(Object.keys(balances[account]).length).to.equal(2);
+      expect(Object.keys(balances[account])[0]).to.equal(token.address);
+      expect(Object.keys(balances[account])[1]).to.equal(secondToken.address);
+      expect(balances[account][token.address].eq(BigNumber.from('100000000000000000000'))).to.equal(
+        true
+      );
+      expect(
+        balances[account][secondToken.address].eq(BigNumber.from('100000000000000000000'))
+      ).to.equal(true);
     }
   });
 

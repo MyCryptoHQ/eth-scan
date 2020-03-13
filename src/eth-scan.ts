@@ -15,17 +15,10 @@ import {
 import { call, ProviderLike } from './providers';
 
 /**
- * An object that contains the address (key) and balance (value).
+ * An object that contains the address (key) and balance or balance (value).
  */
-export interface BalanceMap {
-  [key: string]: BigNumber;
-}
-
-/**
- * An object that contains the addresses (key) and balances (value).
- */
-export interface ArrayBalanceMap {
-  [key: string]: BigNumber[];
+export interface BalanceMap<T = BigNumber> {
+  [key: string]: T;
 }
 
 export interface EthScanOptions {
@@ -108,6 +101,46 @@ export const getTokenBalances = async (
 };
 
 /**
+ * Get the ERC-20 token balances for multiple contracts, for multiple addresses. Note that this may fail if there are
+ * too many addresses or tokens, and the batch size is too large.
+ *
+ * @param {ProviderLike} provider
+ * @param {string[]} addresses
+ * @param {string[]} tokenAddresses
+ * @param {EthScanOptions} options
+ * @return {Promise<BalanceMap<BalanceMap>>}
+ */
+export const getTokensBalances = async (
+  provider: ProviderLike,
+  addresses: string[],
+  tokenAddresses: string[],
+  options?: EthScanOptions
+): Promise<BalanceMap<BalanceMap>> => {
+  const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
+  const batchSize = options?.batchSize ?? BATCH_SIZE;
+
+  const balances = await batch<BigNumber[]>(
+    async (batchedAddresses: string[]) => {
+      const data = encodeWithId(
+        TOKENS_BALANCES_ID,
+        TOKENS_BALANCES_TYPE,
+        batchedAddresses,
+        tokenAddresses
+      );
+
+      return decode<[BigNumber[][]]>(
+        ['uint256[][]'],
+        await call(provider, contractAddress, data)
+      )[0];
+    },
+    batchSize,
+    addresses
+  );
+
+  return toNestedBalanceMap(addresses, tokenAddresses, balances);
+};
+
+/**
  * Get the ERC-20 token balance of the tokens with the addresses `tokenAddresses` for the single
  * address specified.
  *
@@ -151,6 +184,26 @@ export const toBalanceMap = (addresses: string[], balances: BigNumber[]): Balanc
     return {
       ...current,
       [addresses[index]]: next
+    };
+  }, {});
+};
+
+/**
+ * Get a nested balance map from an array of addresses, token addresses, and balances.
+ *
+ * @param {string[]} addresses
+ * @param {BigNumber[]} tokenAddresses
+ * @param {BalanceMap<BalanceMap>} balances
+ */
+export const toNestedBalanceMap = (
+  addresses: string[],
+  tokenAddresses: string[],
+  balances: BigNumber[][]
+): BalanceMap<BalanceMap> => {
+  return balances.reduce<BalanceMap<BalanceMap>>((current, next, index) => {
+    return {
+      ...current,
+      [addresses[index]]: toBalanceMap(tokenAddresses, next)
     };
   }, {});
 };
