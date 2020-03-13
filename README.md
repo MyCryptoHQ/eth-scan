@@ -90,7 +90,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ### `EthScanOptions`
 
-* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x9faa157a8166a1a0db7da851da458d5c13855541](https://etherscan.io/address/0x9faa157a8166a1a0db7da851da458d5c13855541).
+* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x86f25b64e1fe4c5162cdeed5245575d32ec549db](https://etherscan.io/address/0x86f25b64e1fe4c5162cdeed5245575d32ec549db).
 
 * `batchSize` \<number\> (optional) - The size of the call batches. Defaults to 1000.
 
