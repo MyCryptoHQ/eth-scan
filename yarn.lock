@@ -743,10 +743,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@ethersproject/abi@^5.0.0-beta.142":
-  version "5.0.0-beta.142"
-  resolved "https://registry.yarnpkg.com/@ethersproject/abi/-/abi-5.0.0-beta.142.tgz#cde0ced7daa2fbc98e35a2c31203331907e84a39"
-  integrity sha512-vJ2V9fPNzi+8iutY4sjy6mgogkJtiGsd9hmpa1bjnGW6qnHOEkAV1fzVpvT002LlnjFgqgtzuLBDZob6oU7i8w==
+"@ethersproject/abi@^5.0.0-beta.146":
+  version "5.0.0-beta.146"
+  resolved "https://registry.yarnpkg.com/@ethersproject/abi/-/abi-5.0.0-beta.146.tgz#c843b90716c37630404e647313119e7e01838163"
+  integrity sha512-9wn60tZ0rLGTlHnrD2V58i+bo+UvWytSCuI506ytqfwYauPI9gSkd3IPQI8Li61J1albZa4qtM37W5QlP0B7Eg==
   dependencies:
     "@ethersproject/address" ">=5.0.0-beta.128"
     "@ethersproject/bignumber" ">=5.0.0-beta.130"
