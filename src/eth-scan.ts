@@ -8,7 +8,9 @@ import {
   TOKEN_BALANCES_ID,
   TOKEN_BALANCES_TYPE,
   TOKENS_BALANCE_ID,
-  TOKENS_BALANCE_TYPE
+  TOKENS_BALANCE_TYPE,
+  TOKENS_BALANCES_ID,
+  TOKENS_BALANCES_TYPE
 } from './constants';
 import { call, ProviderLike } from './providers';
 
@@ -17,6 +19,13 @@ import { call, ProviderLike } from './providers';
  */
 export interface BalanceMap {
   [key: string]: BigNumber;
+}
+
+/**
+ * An object that contains the addresses (key) and balances (value).
+ */
+export interface ArrayBalanceMap {
+  [key: string]: BigNumber[];
 }
 
 export interface EthScanOptions {
@@ -52,7 +61,7 @@ export const getEtherBalances = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, batchedAddresses);
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -89,7 +98,7 @@ export const getTokenBalances = async (
         tokenAddress
       );
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -121,7 +130,7 @@ export const getTokensBalance = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(TOKENS_BALANCE_ID, TOKENS_BALANCE_TYPE, address, batchedAddresses);
 
-      return decode(await call(provider, contractAddress, data));
+      return decode<[BigNumber[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     tokenAddresses

@@ -9,13 +9,13 @@ const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
  * @param {Buffer} data The buffer to decode.
  * @return {BigNumber[]} An array of BigNumbers.
  */
-export const decode = (data: Buffer): BigNumber[] => {
+/*export const decode = (data: Buffer): BigNumber[] => {
   const balances: BigNumber[] = [];
   for (let i = 64; i < data.length; i += 32) {
     balances.push(BigNumber.from(bufferToString(data.subarray(i, i + 32))));
   }
   return balances;
-};
+};*/
 
 /**
  * Encode the addresses and an optional token to an input data string.
@@ -26,6 +26,18 @@ export const decode = (data: Buffer): BigNumber[] => {
  */
 export const encode = (types: string[], ...args: any[]): string => {
   return defaultAbiCoder.encode(types, [...args]);
+};
+
+/**
+ * Decode data from a raw Buffer.
+ *
+ * @param {string[]} types An array of types.
+ * @param {Buffer} data The Buffer to decode.
+ * @return {T} The decoded data.
+ * @template T
+ */
+export const decode = <T>(types: string[], data: Buffer): T => {
+  return defaultAbiCoder.decode(types, data);
 };
 
 /**
