@@ -88,6 +88,18 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 * Returns: \<Promise<[BalanceMap](#balancemap)>\> - A promise with an object with the addresses and the balances.
 
+## `getTokensBalances(provider, addresses, tokens, options)`
+
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+
+* `addresses` \<string[]\> - An array of addresses as hexadecimal string.
+
+* `tokens` \<string[]\> - An array of ERC-20 token addresses.
+
+* `options` \<[EthScanOptions](#ethscanoptions)\> (optional) - The options to use.
+
+* Returns: \<Promise<[BalanceMap](#balancemap)\<[BalanceMap](#balancemap)\>>\> - A promise with an object with the addresses and the balances.
+
 ### `EthScanOptions`
 
 * `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x9faa157a8166a1a0db7da851da458d5c13855541](https://etherscan.io/address/0x9faa157a8166a1a0db7da851da458d5c13855541).
