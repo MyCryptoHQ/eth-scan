@@ -1,4 +1,3 @@
-import { ContractInput } from '@findeth/abi/typings/contract';
 import { decode as decodeAbi, encode as encodeAbi } from '@findeth/abi';
 
 const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
@@ -6,7 +5,7 @@ const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
 /**
  * Encode the addresses and an optional token to an input data string.
  *
- * @param {ContractInput[]} inputs An array of inputs.
+ * @param {string[]} inputs An array of inputs.
  * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data formatted as hexadecimal string.
  */
@@ -17,7 +16,7 @@ export const encode = (inputs: string[], ...data: unknown[]): string => {
 /**
  * Decode data from a raw Buffer.
  *
- * @param {ContractInput[]} inputs An array of inputs.
+ * @param {string[]} inputs An array of inputs.
  * @param {Buffer} data The Buffer to decode.
  * @return {T} The decoded data.
  * @template T
@@ -30,7 +29,7 @@ export const decode = <T extends unknown[]>(inputs: string[], data: Buffer): T =
  * Encode the addresses and an optional token to an input data string with the function identifier.
  *
  * @param {string} id The function identifier as a hexadecimal string.
- * @param {ContractInput[]} types An array of inputs.
+ * @param {string[]} types An array of inputs.
  * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data as a hexadecimal string.
  */
