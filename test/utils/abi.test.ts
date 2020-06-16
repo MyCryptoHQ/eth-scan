@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { BigNumber } from '@ethersproject/bignumber';
 import { decode, encode, encodeWithId, stringToBuffer } from '../../src/utils';
 import {
   ETHER_BALANCES_ID,
@@ -18,16 +17,17 @@ describe('utils/abi', () => {
           '0000000000000000000000000000000000000000000000056bc75e2d63100000'
       );
 
-      const decoded = decode<[BigNumber[]]>(['uint256[]'], encoded)[0];
-
+      const decoded = decode<[bigint[]]>(ETHER_BALANCES_TYPE.outputs, encoded)[0];
       expect(decoded.length).to.equal(1);
-      expect(decoded[0].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
+      expect(decoded[0]).to.equal(100000000000000000000n);
     });
   });
 
   describe('encode()', () => {
     it('should encode addresses', () => {
-      const encoded = encode(ETHER_BALANCES_TYPE, ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f']);
+      const encoded = encode(ETHER_BALANCES_TYPE.inputs, [
+        '0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'
+      ]);
 
       expect(encoded).to.equal(
         '0x' +
@@ -39,7 +39,7 @@ describe('utils/abi', () => {
 
     it('should encode addresses with a token specified', () => {
       const encoded = encode(
-        TOKEN_BALANCES_TYPE,
+        TOKEN_BALANCES_TYPE.inputs,
         ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'],
         '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
       );
@@ -56,7 +56,7 @@ describe('utils/abi', () => {
 
   describe('encodeWithId()', () => {
     it('should encode addresses with a function identifier', () => {
-      const encoded = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, [
+      const encoded = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE.inputs, [
         '0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'
       ]);
 
@@ -72,7 +72,7 @@ describe('utils/abi', () => {
     it('should encode addresses with a function identifier and a token specified', () => {
       const encoded = encodeWithId(
         TOKEN_BALANCES_ID,
-        TOKEN_BALANCES_TYPE,
+        TOKEN_BALANCES_TYPE.inputs,
         ['0xf00f00f00f00f00f00f00f00f00f00f00f00f00f'],
         '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
       );

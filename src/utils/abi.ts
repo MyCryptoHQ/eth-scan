@@ -1,56 +1,41 @@
-import { defaultAbiCoder } from '@ethersproject/abi';
-import { BigNumber } from '@ethersproject/bignumber';
+import { ContractInput } from '@findeth/abi/typings/contract';
+import { decode as decodeAbi, encode as encodeAbi } from '@findeth/abi';
 
 const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
 
 /**
- * Decode raw data to an array of BigNumbers.
- *
- * @param {Buffer} data The buffer to decode.
- * @return {BigNumber[]} An array of BigNumbers.
- */
-/*export const decode = (data: Buffer): BigNumber[] => {
-  const balances: BigNumber[] = [];
-  for (let i = 64; i < data.length; i += 32) {
-    balances.push(BigNumber.from(bufferToString(data.subarray(i, i + 32))));
-  }
-  return balances;
-};*/
-
-/**
  * Encode the addresses and an optional token to an input data string.
  *
- * @param {string[]} types An array of types.
- * @param {...any[]} args The arguments as defined by the types.
+ * @param {ContractInput[]} inputs An array of inputs.
+ * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data formatted as hexadecimal string.
  */
-export const encode = (types: string[], ...args: any[]): string => {
-  return defaultAbiCoder.encode(types, [...args]);
+export const encode = (inputs: ContractInput[], ...data: unknown[]): string => {
+  return bufferToString(encodeAbi(inputs, data));
 };
 
 /**
  * Decode data from a raw Buffer.
  *
- * @param {string[]} types An array of types.
+ * @param {ContractInput[]} inputs An array of inputs.
  * @param {Buffer} data The Buffer to decode.
  * @return {T} The decoded data.
  * @template T
  */
-export const decode = <T>(types: string[], data: Buffer): T => {
-  // TODO: See if there's a better way to type this
-  return (defaultAbiCoder.decode(types, data) as unknown) as T;
+export const decode = <T extends unknown[]>(inputs: ContractInput[], data: Buffer): T => {
+  return decodeAbi(inputs, data);
 };
 
 /**
  * Encode the addresses and an optional token to an input data string with the function identifier.
  *
  * @param {string} id The function identifier as a hexadecimal string.
- * @param {string[]} types An array of types.
- * @param {...any[]} args The arguments as defined by the types.
+ * @param {ContractInput[]} types An array of inputs.
+ * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data as a hexadecimal string.
  */
-export const encodeWithId = (id: string, types: string[], ...args: any[]): string => {
-  return `0x${id}${encode(types, ...args).slice(2)}`;
+export const encodeWithId = (id: string, types: ContractInput[], ...data: unknown[]): string => {
+  return `0x${id}${encode(types, ...data).slice(2)}`;
 };
 
 /**
