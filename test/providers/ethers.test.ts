@@ -24,10 +24,10 @@ describe('providers/ethers', () => {
       const accounts = await web3.eth.getAccounts();
       accounts.shift();
 
-      const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE.inputs, accounts);
+      const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, accounts);
       const response = await callWithEthers(provider, address, data);
 
-      const decoded = decode<[BigNumber[]]>(ETHER_BALANCES_TYPE.outputs, response)[0];
+      const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
         const balance = BigInt(await web3.eth.getBalance(accounts[i]));
@@ -40,15 +40,10 @@ describe('providers/ethers', () => {
       const token = await FixedBalanceToken.new();
       const accounts = await web3.eth.getAccounts();
 
-      const data = encodeWithId(
-        TOKEN_BALANCES_ID,
-        TOKEN_BALANCES_TYPE.inputs,
-        accounts,
-        token.address
-      );
+      const data = encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, accounts, token.address);
       const response = await callWithEthers(provider, address, data);
 
-      const decoded = decode<[BigNumber[]]>(TOKEN_BALANCES_TYPE.outputs, response)[0];
+      const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
         expect(decoded[i]).to.equal(100000000000000000000n);

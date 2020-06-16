@@ -10,7 +10,7 @@ const HEXADECIMAL_CHARACTERS = '0123456789abcdef';
  * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data formatted as hexadecimal string.
  */
-export const encode = (inputs: ContractInput[], ...data: unknown[]): string => {
+export const encode = (inputs: string[], ...data: unknown[]): string => {
   return bufferToString(encodeAbi(inputs, data));
 };
 
@@ -22,7 +22,7 @@ export const encode = (inputs: ContractInput[], ...data: unknown[]): string => {
  * @return {T} The decoded data.
  * @template T
  */
-export const decode = <T extends unknown[]>(inputs: ContractInput[], data: Buffer): T => {
+export const decode = <T extends unknown[]>(inputs: string[], data: Buffer): T => {
   return decodeAbi(inputs, data);
 };
 
@@ -34,7 +34,7 @@ export const decode = <T extends unknown[]>(inputs: ContractInput[], data: Buffe
  * @param {...any[]} data The arguments as defined by the types.
  * @return {string} The input data as a hexadecimal string.
  */
-export const encodeWithId = (id: string, types: ContractInput[], ...data: unknown[]): string => {
+export const encodeWithId = (id: string, types: string[], ...data: unknown[]): string => {
   return `0x${id}${encode(types, ...data).slice(2)}`;
 };
 
