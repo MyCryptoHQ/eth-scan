@@ -23,7 +23,7 @@ npm install @mycrypto/eth-scan
 ## Example
 
 ```typescript
-import { getEtherBalances } from 'eth-scan';
+import { getEtherBalances } from '@mycrypto/eth-scan';
 
 getEtherBalances('http://127.0.0.1:8545', [
   '0x9a0decaffb07fb500ff7e5d253b16892dbec006a',
@@ -38,11 +38,11 @@ Results in:
 
 ```typescript
 {
-  '0x9a0decaffb07fb500ff7e5d253b16892dbec006a': BigNumber(1000000000000000000),
-  '0xeb65f72a2f5464157288ac15f1bb56c56e6be375': BigNumber(1000000000000000000),
-  '0x1b96c634f9e9fcfb76932e165984901701352ffd': BigNumber(1000000000000000000),
-  '0x740539b55ee5dc58efffb88fea44a9008f8daa6f': BigNumber(1000000000000000000),
-  '0x95d9e32dc03770699a6a5e5858165b174d500015': BigNumber(1000000000000000000)
+  '0x9a0decaffb07fb500ff7e5d253b16892dbec006a': BigInt(1000000000000000000),
+  '0xeb65f72a2f5464157288ac15f1bb56c56e6be375': BigInt(1000000000000000000),
+  '0x1b96c634f9e9fcfb76932e165984901701352ffd': BigInt(1000000000000000000),
+  '0x740539b55ee5dc58efffb88fea44a9008f8daa6f': BigInt(1000000000000000000),
+  '0x95d9e32dc03770699a6a5e5858165b174d500015': BigInt(1000000000000000000)
 }
 ```
 
@@ -108,7 +108,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ### `BalanceMap`
 
-A `BalanceMap` is an object with an address as key and a [BigNumber](https://github.com/ethers-io/ethers.js/tree/ethers-v5-beta/packages/bignumber) as value.
+A `BalanceMap` is an object with an address as key and a [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) as value.
 
 ### Providers
 
