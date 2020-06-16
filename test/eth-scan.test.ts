@@ -7,7 +7,9 @@ const InvalidToken = artifacts.require('InvalidToken');
 
 const LOCAL_PROVIDER: string = (web3 as any).currentProvider.host;
 
-describe('eth-scan', () => {
+describe('eth-scan', function() {
+  this.timeout(30000);
+
   it('should get Ether balances from the contract', async () => {
     const { address: contractAddress } = await BalanceScanner.deployed();
     const accounts = await web3.eth.getAccounts();
