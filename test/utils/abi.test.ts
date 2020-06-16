@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { BigNumber } from '@ethersproject/bignumber';
 import { decode, encode, encodeWithId, stringToBuffer } from '../../src/utils';
 import {
   ETHER_BALANCES_ID,
@@ -18,10 +17,9 @@ describe('utils/abi', () => {
           '0000000000000000000000000000000000000000000000056bc75e2d63100000'
       );
 
-      const decoded = decode<[BigNumber[]]>(['uint256[]'], encoded)[0];
-
+      const decoded = decode<[bigint[]]>(['uint256[]'], encoded)[0];
       expect(decoded.length).to.equal(1);
-      expect(decoded[0].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
+      expect(decoded[0]).to.equal(100000000000000000000n);
     });
   });
 

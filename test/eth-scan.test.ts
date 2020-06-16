@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { BigNumber } from '@ethersproject/bignumber';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from '../src';
 
 const BalanceScanner = artifacts.require('BalanceScanner');
@@ -8,7 +7,9 @@ const InvalidToken = artifacts.require('InvalidToken');
 
 const LOCAL_PROVIDER: string = (web3 as any).currentProvider.host;
 
-describe('eth-scan', () => {
+describe('eth-scan', function() {
+  this.timeout(30000);
+
   it('should get Ether balances from the contract', async () => {
     const { address: contractAddress } = await BalanceScanner.deployed();
     const accounts = await web3.eth.getAccounts();
@@ -17,8 +18,8 @@ describe('eth-scan', () => {
     const balances = await getEtherBalances(LOCAL_PROVIDER, accounts, { contractAddress });
 
     for (const account of accounts) {
-      const balance = BigNumber.from(await web3.eth.getBalance(account));
-      expect(balance.eq(balances[account])).to.equal(true);
+      const balance = BigInt(await web3.eth.getBalance(account));
+      expect(balance).to.equal(balances[account]);
     }
   });
 
@@ -33,8 +34,8 @@ describe('eth-scan', () => {
     });
 
     for (const account of accounts) {
-      const balance = BigNumber.from(await web3.eth.getBalance(account));
-      expect(balance.eq(balances[account])).to.equal(true);
+      const balance = BigInt(await web3.eth.getBalance(account));
+      expect(balance).to.equal(balances[account]);
     }
   });
 
@@ -58,12 +59,8 @@ describe('eth-scan', () => {
       expect(Object.keys(balances[account]).length).to.equal(2);
       expect(Object.keys(balances[account])[0]).to.equal(token.address);
       expect(Object.keys(balances[account])[1]).to.equal(secondToken.address);
-      expect(balances[account][token.address].eq(BigNumber.from('100000000000000000000'))).to.equal(
-        true
-      );
-      expect(
-        balances[account][secondToken.address].eq(BigNumber.from('100000000000000000000'))
-      ).to.equal(true);
+      expect(balances[account][token.address]).to.equal(100000000000000000000n);
+      expect(balances[account][secondToken.address]).to.equal(100000000000000000000n);
     }
   });
 
@@ -84,10 +81,8 @@ describe('eth-scan', () => {
     expect(Object.keys(balances).length).to.equal(2);
     expect(Object.keys(balances)[0]).to.equal(token.address);
     expect(Object.keys(balances)[1]).to.equal(secondToken.address);
-    expect(balances[token.address].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
-    expect(balances[secondToken.address].eq(BigNumber.from('100000000000000000000'))).to.equal(
-      true
-    );
+    expect(balances[token.address]).to.equal(100000000000000000000n);
+    expect(balances[secondToken.address]).to.equal(100000000000000000000n);
   });
 
   it('should not throw on invalid contracts or non-contract addresses', async () => {
@@ -104,8 +99,8 @@ describe('eth-scan', () => {
     );
 
     expect(Object.keys(balances).length).to.equal(3);
-    expect(balances[token.address].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
-    expect(balances[invalidToken.address].eq(BigNumber.from('0'))).to.equal(true);
-    expect(balances[accounts[0]].eq(BigNumber.from('0'))).to.equal(true);
+    expect(balances[token.address]).to.equal(100000000000000000000n);
+    expect(balances[invalidToken.address]).to.equal(0n);
+    expect(balances[accounts[0]]).to.equal(0n);
   });
 });

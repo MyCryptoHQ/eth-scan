@@ -47,8 +47,7 @@
     "lint:tslint": "tslint --project ."
   },
   "dependencies": {
-    "@ethersproject/abi": "^5.0.0-beta.146",
-    "@ethersproject/bignumber": "^5.0.0-beta.135",
+    "@findeth/abi": "^0.2.1",
     "isomorphic-unfetch": "^3.0.0"
   },
   "devDependencies": {
@@ -56,6 +55,7 @@
     "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
     "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/plugin-syntax-bigint": "^7.8.3",
     "@babel/plugin-transform-modules-commonjs": "^7.7.5",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.7.7",

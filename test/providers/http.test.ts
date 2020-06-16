@@ -38,8 +38,8 @@ describe('providers/http', () => {
       const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
-        const balance = BigNumber.from(await web3.eth.getBalance(accounts[i]));
-        expect(balance.eq(decoded[i])).to.equal(true);
+        const balance = BigInt(await web3.eth.getBalance(accounts[i]));
+        expect(balance).to.equal(decoded[i]);
       }
     });
 
@@ -54,7 +54,7 @@ describe('providers/http', () => {
       const decoded = decode<[BigNumber[]]>(['uint256[]'], response)[0];
 
       for (let i = 0; i < accounts.length; i++) {
-        expect(decoded[i].eq(BigNumber.from('100000000000000000000'))).to.equal(true);
+        expect(decoded[i]).to.equal(100000000000000000000n);
       }
     });
   });
