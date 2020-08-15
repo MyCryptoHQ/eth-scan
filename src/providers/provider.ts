@@ -1,9 +1,13 @@
 import { callWithEthers, EthersProviderLike, isEthersProvider } from './ethers';
 import { callWithHttp, HttpProviderLike, isHttpProvider } from './http';
 import { callWithWeb3, isWeb3Provider, Web3ProviderLike } from './web3';
-import { callWithShepherd, isShepherdProvider } from './shepherd';
+import { callWithShepherd, isShepherdProvider, ShepherdProviderLike } from './shepherd';
 
-export type ProviderLike = HttpProviderLike | EthersProviderLike | Web3ProviderLike;
+export type ProviderLike =
+  | HttpProviderLike
+  | EthersProviderLike
+  | ShepherdProviderLike
+  | Web3ProviderLike;
 
 /**
  * Send a call with the data, using the specified provider. If the provider is not a valid provider type (e.g. not a
