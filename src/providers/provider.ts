@@ -1,6 +1,7 @@
 import { callWithEthers, EthersProviderLike, isEthersProvider } from './ethers';
 import { callWithHttp, HttpProviderLike, isHttpProvider } from './http';
 import { callWithWeb3, isWeb3Provider, Web3ProviderLike } from './web3';
+import { callWithShepherd, isShepherdProvider } from './shepherd';
 
 export type ProviderLike = HttpProviderLike | EthersProviderLike | Web3ProviderLike;
 
@@ -24,6 +25,10 @@ export const call = async (
 
   if (isHttpProvider(provider)) {
     return callWithHttp(provider, contractAddress, data);
+  }
+
+  if (isShepherdProvider(provider)) {
+    return callWithShepherd(provider, contractAddress, data);
   }
 
   if (isWeb3Provider(provider)) {
