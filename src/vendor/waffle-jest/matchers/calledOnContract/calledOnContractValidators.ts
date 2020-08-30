@@ -1,5 +1,5 @@
-import { Contract } from 'ethers';
 import { MockProvider } from '@ethereum-waffle/provider';
+import { Contract } from 'ethers';
 import { ProviderWithHistoryExpected } from './error';
 import { ensure } from './utils';
 

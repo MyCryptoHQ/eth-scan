@@ -1,6 +1,5 @@
 import { Contract, Transaction, utils } from 'ethers';
 import diff from 'jest-diff';
-
 import { filterLogsWithTopics, compareArgs } from './utils';
 
 export async function toHaveEmittedWith(

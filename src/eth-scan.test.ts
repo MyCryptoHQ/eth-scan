@@ -1,15 +1,25 @@
-import { Signer } from 'ethers';
-import { MockContract, MockProvider } from 'ethereum-waffle';
-import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { BalanceScanner } from './contracts/BalanceScanner';
-import { abi } from '../artifacts/ERC20.json';
-import { Erc20 } from './contracts/Erc20';
 import { waffle, ethers } from '@nomiclabs/buidler';
+import { MockContract, MockProvider } from 'ethereum-waffle';
+import { Signer } from 'ethers';
+import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
+import { abi } from '../artifacts/ERC20.json';
+import { BalanceScanner } from './contracts/BalanceScanner';
+import { Erc20 } from './contracts/Erc20';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
 
 const { deployContract, deployMockContract, loadFixture } = waffle;
 
-export const fixture = async (signers: Signer[], provider: MockProvider) => {
+// eslint-disable-next-line jest/no-export
+export const fixture = async (
+  signers: Signer[],
+  provider: MockProvider
+): Promise<{
+  contract: BalanceScanner;
+  signers: Signer[];
+  addresses: string[];
+  provider: MockProvider;
+  token: MockContract & Erc20;
+}> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
   const token = (await deployMockContract(signer, abi)) as MockContract & Erc20;
@@ -67,7 +77,7 @@ describe('eth-scan', () => {
         contractAddress: contract.address
       });
       for (const address of addresses) {
-        expect(Object.keys(balances[address]).length).toBe(2);
+        expect(Object.keys(balances[address])).toHaveLength(2);
         expect(Object.keys(balances[address])[0]).toBe(tokenA.address);
         expect(Object.keys(balances[address])[1]).toBe(tokenB.address);
         expect(balances[address][tokenA.address]).toBe(1000n);
@@ -100,7 +110,7 @@ describe('eth-scan', () => {
       const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {
         contractAddress: contract.address
       });
-      expect(Object.keys(balances).length).toBe(2);
+      expect(Object.keys(balances)).toHaveLength(2);
       expect(Object.keys(balances)[0]).toBe(tokenA.address);
       expect(Object.keys(balances)[1]).toBe(tokenB.address);
       expect(balances[tokenA.address]).toBe(1000n);

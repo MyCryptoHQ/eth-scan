@@ -1,4 +1,3 @@
-import { batch, decode, encodeWithId } from './utils';
 import {
   BATCH_SIZE,
   CONTRACT_ADDRESS,
@@ -12,6 +11,7 @@ import {
   TOKENS_BALANCES_TYPE
 } from './constants';
 import { call, ProviderLike } from './providers';
+import { batch, decode, encodeWithId } from './utils';
 
 /**
  * An object that contains the address (key) and balance or balance (value).
@@ -53,7 +53,7 @@ export const getEtherBalances = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, batchedAddresses);
 
-      return decode<[bigint[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
+      return decode<[Array<bigint>]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -85,7 +85,7 @@ export const getTokenBalances = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, batchedAddresses, tokenAddress);
 
-      return decode<[bigint[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
+      return decode<[Array<bigint>]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -113,11 +113,11 @@ export const getTokensBalances = async (
   const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
   const batchSize = options?.batchSize ?? BATCH_SIZE;
 
-  const balances = await batch<bigint[]>(
+  const balances = await batch<Array<bigint>>(
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(TOKENS_BALANCES_ID, TOKENS_BALANCES_TYPE, batchedAddresses, tokenAddresses);
 
-      return decode<[bigint[][]]>(['uint256[][]'], await call(provider, contractAddress, data))[0];
+      return decode<[Array<Array<bigint>>]>(['uint256[][]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -149,7 +149,7 @@ export const getTokensBalance = async (
     async (batchedAddresses: string[]) => {
       const data = encodeWithId(TOKENS_BALANCE_ID, TOKENS_BALANCE_TYPE, address, batchedAddresses);
 
-      return decode<[bigint[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
+      return decode<[Array<bigint>]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     tokenAddresses
@@ -165,7 +165,7 @@ export const getTokensBalance = async (
  * @param {bigint[]} balances
  * @return {BalanceMap}
  */
-export const toBalanceMap = (addresses: string[], balances: bigint[]): BalanceMap => {
+export const toBalanceMap = (addresses: string[], balances: Array<bigint>): BalanceMap => {
   return balances.reduce<BalanceMap>((current, next, index) => {
     return {
       ...current,
@@ -184,7 +184,7 @@ export const toBalanceMap = (addresses: string[], balances: bigint[]): BalanceMa
 export const toNestedBalanceMap = (
   addresses: string[],
   tokenAddresses: string[],
-  balances: bigint[][]
+  balances: Array<Array<bigint>>
 ): BalanceMap<BalanceMap> => {
   return balances.reduce<BalanceMap<BalanceMap>>((current, next, index) => {
     return {

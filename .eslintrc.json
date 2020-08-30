@@ -1,0 +1,83 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": ["eslint:recommended", "eslint-config-prettier"],
+  "plugins": ["eslint-plugin-import"],
+  "ignorePatterns": ["src/vendor/**/*"],
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "curly": "error",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-deprecated": "warn",
+    "import/no-duplicates": "error",
+    "import/no-mutable-exports": "error",
+    "import/no-namespace": "error",
+    "import/no-self-import": "error",
+    "import/no-useless-path-segments": "error",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "never",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": false
+        }
+      }
+    ],
+    "no-console": "error",
+    "quotes": ["error", "single", "avoid-escape"]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:eslint-plugin-import/typescript",
+        "eslint-config-prettier/@typescript-eslint"
+      ],
+      "plugins": ["@typescript-eslint"],
+      "rules": {
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array-simple"
+          }
+        ],
+        "@typescript-eslint/consistent-type-assertions": [
+          "error",
+          {
+            "assertionStyle": "as"
+          }
+        ],
+        "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "no-public"
+          }
+        ],
+        "@typescript-eslint/method-signature-style": ["error", "method"],
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "react/no-unescaped-entities": "off",
+        "react/prop-types": "off",
+        "react-hooks/exhaustive-deps": "off"
+      }
+    },
+    {
+      "files": ["*.test.ts", "jest.config.js", "jest.setup.js"],
+      "env": {
+        "node": true,
+        "jest": true
+      },
+      "extends": ["plugin:eslint-plugin-jest/recommended", "plugin:eslint-plugin-jest/style"],
+      "plugins": ["eslint-plugin-jest"],
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "modules": true
+        }
+      }
+    }
+  ]
+}

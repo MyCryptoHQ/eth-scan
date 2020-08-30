@@ -7,7 +7,7 @@ describe('chunk', () => {
   it('should create chunks of an array', () => {
     const chunked = chunk(array, 2);
 
-    expect(chunked.length).toBe(2);
+    expect(chunked).toHaveLength(2);
     expect(chunked[0][0]).toBe('foo');
     expect(chunked[1][0]).toBe('baz');
   });
@@ -15,9 +15,9 @@ describe('chunk', () => {
   it('should keep uneven items', () => {
     const chunked = chunk(array, 3);
 
-    expect(chunked.length).toBe(2);
-    expect(chunked[0].length).toBe(3);
-    expect(chunked[1].length).toBe(1);
+    expect(chunked).toHaveLength(2);
+    expect(chunked[0]).toHaveLength(3);
+    expect(chunked[1]).toHaveLength(1);
   });
 });
 
@@ -31,9 +31,9 @@ describe('batch', () => {
 
     const balances = await batch(handler, 2, ['0x0', '0x1', '0x2', '0x3']);
 
-    expect(balances.length).toBe(4);
+    expect(balances).toHaveLength(4);
     expect(handler).toHaveBeenCalledTimes(2);
-    expect(handler).nthCalledWith(1, ['0x0', '0x1']);
-    expect(handler).nthCalledWith(2, ['0x2', '0x3']);
+    expect(handler).toHaveBeenNthCalledWith(1, ['0x0', '0x1']);
+    expect(handler).toHaveBeenNthCalledWith(2, ['0x2', '0x3']);
   });
 });

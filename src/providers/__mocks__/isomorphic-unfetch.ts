@@ -1,9 +1,10 @@
 import { ethers } from '@nomiclabs/buidler';
+import { JsonRpcResult } from '../http';
 
 /**
  * Proxies any fetch request to use the Ethers.js object provided by Buidler.
  */
-export default (url: string, { body }: { body: string }) => {
+export default (url: string, { body }: { body: string }): { json(): Promise<JsonRpcResult<unknown>> } => {
   const {
     id,
     jsonrpc,
