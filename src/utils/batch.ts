@@ -1,5 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
-
 /**
  * Split an array per `size` items.
  *
@@ -10,9 +8,7 @@ import { BigNumber } from '@ethersproject/bignumber';
  */
 export const chunk = <T>(input: T[], size: number): T[][] => {
   return input.reduce<T[][]>((array, item, index) => {
-    return index % size === 0
-      ? [...array, [item]]
-      : [...array.slice(0, -1), [...array.slice(-1)[0], item]];
+    return index % size === 0 ? [...array, [item]] : [...array.slice(0, -1), [...array.slice(-1)[0], item]];
   }, []);
 };
 
@@ -24,7 +20,7 @@ export const chunk = <T>(input: T[], size: number): T[][] => {
  * @param {string[]} addresses The addresses to batch.
  * @return {Promise<BigNumber[]>} A promise with the balances.
  */
-export const batch = async <T = BigNumber>(
+export const batch = async <T = bigint>(
   handler: (addresses: string[]) => Promise<T[]>,
   size: number,
   addresses: string[]

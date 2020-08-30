@@ -13,11 +13,7 @@ export type ProviderLike = HttpProviderLike | EthersProviderLike | Web3ProviderL
  * @param {string} data
  * @return {Promise<Buffer>}
  */
-export const call = async (
-  provider: ProviderLike,
-  contractAddress: string,
-  data: string
-): Promise<Buffer> => {
+export const call = async (provider: ProviderLike, contractAddress: string, data: string): Promise<Buffer> => {
   if (isEthersProvider(provider)) {
     return callWithEthers(provider, contractAddress, data);
   }
