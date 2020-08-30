@@ -1,4 +1,6 @@
-pragma solidity 0.6.4;
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
 import "./ERC20.sol";
