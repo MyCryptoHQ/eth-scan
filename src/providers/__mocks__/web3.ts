@@ -10,10 +10,12 @@ export default class Web3 {
         params: [options]
       } = payload;
 
+      const { to, data } = options as { to: string; data: string };
+
       ethers.provider
         .call({
-          to: options.to,
-          data: options.data
+          to,
+          data
         })
         .then(result => {
           callback(null, {
