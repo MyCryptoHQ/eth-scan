@@ -2,7 +2,7 @@ import { BigNumber, Signer } from 'ethers';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { waffle } from '@nomiclabs/buidler';
 import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { abi } from '../artifacts/IERC20.json';
+import { abi } from '../artifacts/ERC20.json';
 import { BalanceScanner } from '../src/contracts/BalanceScanner';
 import { Erc20 } from '../src/contracts/Erc20';
 
