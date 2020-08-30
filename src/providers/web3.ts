@@ -3,10 +3,7 @@ import { getPayload, JsonRpcPayload, JsonRpcResult } from './http';
 
 export interface Web3ProviderLike {
   currentProvider: {
-    send<T>(
-      payload: JsonRpcPayload,
-      callback: (error: Error | null, result?: JsonRpcResult<T>) => void
-    ): void;
+    send<T>(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResult<T>) => void): void;
   };
 }
 
@@ -44,10 +41,7 @@ export const callWithWeb3 = async (
   }
 };
 
-export const send = <T>(
-  provider: Web3ProviderLike,
-  payload: JsonRpcPayload
-): Promise<JsonRpcResult<T>> => {
+export const send = <T>(provider: Web3ProviderLike, payload: JsonRpcPayload): Promise<JsonRpcResult<T>> => {
   return new Promise((resolve, reject) => {
     provider.currentProvider.send<T>(payload, (error, result) => {
       if (error) {

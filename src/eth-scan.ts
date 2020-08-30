@@ -83,12 +83,7 @@ export const getTokenBalances = async (
 
   const balances = await batch(
     async (batchedAddresses: string[]) => {
-      const data = encodeWithId(
-        TOKEN_BALANCES_ID,
-        TOKEN_BALANCES_TYPE,
-        batchedAddresses,
-        tokenAddress
-      );
+      const data = encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, batchedAddresses, tokenAddress);
 
       return decode<[bigint[]]>(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
@@ -120,12 +115,7 @@ export const getTokensBalances = async (
 
   const balances = await batch<bigint[]>(
     async (batchedAddresses: string[]) => {
-      const data = encodeWithId(
-        TOKENS_BALANCES_ID,
-        TOKENS_BALANCES_TYPE,
-        batchedAddresses,
-        tokenAddresses
-      );
+      const data = encodeWithId(TOKENS_BALANCES_ID, TOKENS_BALANCES_TYPE, batchedAddresses, tokenAddresses);
 
       return decode<[bigint[][]]>(['uint256[][]'], await call(provider, contractAddress, data))[0];
     },

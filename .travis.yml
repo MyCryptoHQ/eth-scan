@@ -1,32 +1,15 @@
 language: node_js
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-      - g++-4.8-multilib
-      - gcc-multilib
-      - libusb-1.0-0-dev
-      - libudev-dev
-
 cache:
   yarn: true
-  directories:
-    - node_modules
-    - "$HOME/.cache"
-
-before_install:
-  - npm install -g yarn
 
 install:
   - yarn --silent
 
 script:
+  - yarn run compile
   - yarn run test
   - yarn run lint
-  - yarn run prettier
 
 before_deploy:
   - yarn run build

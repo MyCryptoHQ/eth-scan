@@ -9,14 +9,13 @@
     "noEmitOnError": true,
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
-  "include": [
-    "./src/**/*",
-    "./test/**/*",
-    "./webpack.config.ts"
+  "files": [
+    "node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
+    "node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src", "tests", "./buidler.config.ts"],
+  "exclude": ["node_modules"]
 }
