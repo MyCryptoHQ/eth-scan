@@ -1,4 +1,3 @@
-import { HttpProviderLike } from './http';
 import { stringToBuffer } from '../utils';
 
 type BlockTag = string | number;
@@ -25,7 +24,7 @@ export const isEthersProvider = (provider: unknown): provider is EthersProviderL
 /**
  * Call the contract with an Ethers provider. This throws an error if the call failed.
  *
- * @param {HttpProviderLike} provider
+ * @param {EthersProviderLike} provider
  * @param {string} contractAddress
  * @param {string} data
  * @return {Promise<Buffer>}

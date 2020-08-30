@@ -1,5 +1,5 @@
-import { decode, encode, encodeWithId, stringToBuffer } from './abi';
 import { ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE } from '../constants';
+import { decode, encode, encodeWithId, stringToBuffer } from './abi';
 
 describe('decode', () => {
   it('should decode data', () => {
@@ -10,8 +10,8 @@ describe('decode', () => {
         '0000000000000000000000000000000000000000000000056bc75e2d63100000'
     );
 
-    const decoded = decode<[bigint[]]>(['uint256[]'], encoded)[0];
-    expect(decoded.length).toBe(1);
+    const decoded = decode<[Array<bigint>]>(['uint256[]'], encoded)[0];
+    expect(decoded).toHaveLength(1);
     expect(decoded[0]).toBe(100000000000000000000n);
   });
 });

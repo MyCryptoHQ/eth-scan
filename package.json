@@ -42,9 +42,9 @@
     "compile:types": "typechain --target ethers-v5 --outDir src/contracts './artifacts/**/*.json'",
     "test": "jest",
     "prettier": "prettier --write --ignore-path .gitignore '**/*.{ts,tsx,js,json,sol}'",
-    "lint": "yarn run lint:ts && yarn run lint:tslint && yarn run lint:solhint && yarn run lint:prettier",
-    "lint:ts": "tsc --noEmit",
-    "lint:tslint": "tslint --project .",
+    "lint": "yarn run lint:tsc && yarn run lint:eslint && yarn run lint:solhint && yarn run lint:prettier",
+    "lint:tsc": "tsc --noEmit",
+    "lint:eslint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js,.jsx",
     "lint:solhint": "solhint -w 0 'contracts/**/*.sol'",
     "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{ts,tsx,js,json,sol}'"
   },
@@ -72,9 +72,15 @@
     "@types/jest": "^26.0.10",
     "@types/node": "^12.0.3",
     "@types/node-fetch": "^2.5.4",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
     "babel-preset-minify": "^0.5.1",
     "core-js": "^3.1.3",
     "cross-env": "^6.0.3",
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
     "ethereum-waffle": "^3.0.2",
     "ethers": "^5.0.9",
     "husky": "^3.0.5",
@@ -85,27 +91,22 @@
     "rimraf": "^3.0.0",
     "solhint": "^3.2.0",
     "ts-node": "^9.0.0",
-    "tslint": "^5.16.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-microsoft-contrib": "^6.2.0",
     "typechain": "^2.0.0",
     "typescript": "^4.0.2",
     "web3": "^1.2.4"
   },
   "lint-staged": {
-    "*.ts": [
-      "prettier --write --config ./.prettierrc --config-precedence file-override",
-      "tslint --project .",
-      "git add"
+    "*.{js,ts}": [
+      "prettier --write",
+      "eslint --fix"
     ],
-    "*.js": [
-      "prettier --write --config ./.prettierrc --config-precedence file-override",
-      "git add"
+    "*.{sol,json}": [
+      "prettier --write"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run test && yarn run lint:ts && lint-staged"
+      "pre-commit": "lint-staged"
     }
   },
   "publishConfig": {

@@ -11,7 +11,7 @@ export type HttpProviderLike = string | HttpProviderWithOptions;
 export interface JsonRpcPayload {
   jsonrpc: string;
   method: string;
-  params: any[];
+  params: unknown[];
   id?: string | number;
 }
 

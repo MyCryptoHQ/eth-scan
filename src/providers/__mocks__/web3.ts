@@ -1,8 +1,8 @@
-import { JsonRpcPayload } from '../http';
 import { ethers } from '@nomiclabs/buidler';
+import { JsonRpcPayload } from '../http';
 
 export default class Web3 {
-  public currentProvider = {
+  currentProvider = {
     send(payload: JsonRpcPayload, callback: (error: Error | null, result: unknown) => void): void {
       const {
         id,
