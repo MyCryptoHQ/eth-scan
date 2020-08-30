@@ -29,7 +29,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "prepare": "yarn run build && yarn run compile",
+    "prepare": "yarn run compile && yarn run build",
     "prepublishOnly": "yarn run test",
     "clean": "rimraf lib",
     "build": "yarn run clean && yarn run build:source && yarn run build:declarations",
@@ -84,7 +84,6 @@
     "prettier-plugin-solidity": "^1.0.0-alpha.56",
     "rimraf": "^3.0.0",
     "solhint": "^3.2.0",
-    "ts-mocha": "^6.0.0",
     "ts-node": "^9.0.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
