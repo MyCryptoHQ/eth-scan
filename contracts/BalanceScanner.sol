@@ -3,6 +3,8 @@
 pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
+import "./ERC20.sol";
+
 /**
  * @title An Ether or token balance scanner
  * @author Maarten Zuidhoorn
