@@ -1,7 +1,7 @@
-pragma solidity 0.6.4;
-pragma experimental ABIEncoderV2;
+// SPDX-License-Identifier: MIT
 
-import "./ERC20.sol";
+pragma solidity ^0.7.0;
+pragma experimental ABIEncoderV2;
 
 /**
  * @title An Ether or token balance scanner
