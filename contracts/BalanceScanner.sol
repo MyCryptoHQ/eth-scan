@@ -58,7 +58,7 @@ contract BalanceScanner {
     balances = new uint256[][](addresses.length);
 
     for (uint256 i = 0; i < addresses.length; i++) {
-      balances[i] = this.tokensBalance(addresses[i], contracts);
+      balances[i] = tokensBalance(addresses[i], contracts);
     }
   }
 
@@ -68,11 +68,7 @@ contract BalanceScanner {
    * @param contracts The addresses of the ERC-20 token contracts
    * @return balances The token balances in the same order as the addresses specified
    */
-  function tokensBalance(address owner, address[] calldata contracts)
-    external
-    view
-    returns (uint256[] memory balances)
-  {
+  function tokensBalance(address owner, address[] calldata contracts) public view returns (uint256[] memory balances) {
     balances = new uint256[](contracts.length);
 
     for (uint256 i = 0; i < contracts.length; i++) {
@@ -87,7 +83,7 @@ contract BalanceScanner {
     * @return balance The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
       function
   */
-  function tokenBalance(address owner, address token) internal view returns (uint256) {
+  function tokenBalance(address owner, address token) private view returns (uint256) {
     uint256 size = codeSize(token);
 
     if (size > 0) {
@@ -104,7 +100,7 @@ contract BalanceScanner {
    * @param _address The address to get code size from
    * @return size Unsigned 256-bits integer
    */
-  function codeSize(address _address) internal view returns (uint256 size) {
+  function codeSize(address _address) private view returns (uint256 size) {
     // solhint-disable-next-line no-inline-assembly
     assembly {
       size := extcodesize(_address)
