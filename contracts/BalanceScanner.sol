@@ -3,7 +3,7 @@
 pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
-import "./ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title An Ether or token balance scanner
@@ -87,7 +87,7 @@ contract BalanceScanner {
     uint256 size = codeSize(token);
 
     if (size > 0) {
-      try ERC20(token).balanceOf(owner) returns (uint256 balance) {
+      try IERC20(token).balanceOf(owner) returns (uint256 balance) {
         return balance;
       } catch {
         return 0;

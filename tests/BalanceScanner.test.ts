@@ -1,10 +1,9 @@
 import { waffle } from '@nomiclabs/buidler';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { BigNumber, Signer } from 'ethers';
+import IERC20Artifact from 'openzeppelin-solidity/build/contracts/IERC20.json';
 import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { abi } from '../artifacts/ERC20.json';
 import { BalanceScanner } from '../src/contracts/BalanceScanner';
-import { Erc20 } from '../src/contracts/Erc20';
 
 const { deployContract, deployMockContract, loadFixture } = waffle;
 
@@ -16,7 +15,7 @@ describe('BalanceScanner', () => {
   const fixture = async (signers: Signer[], provider: MockProvider) => {
     const signer = signers[0];
     const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
-    const token = (await deployMockContract(signer, abi)) as MockContract & Erc20;
+    const token = (await deployMockContract(signer, IERC20Artifact.abi)) as MockContract;
 
     return { contract, signers, provider, token };
   };
@@ -67,10 +66,10 @@ describe('BalanceScanner', () => {
   describe('tokensBalances', () => {
     it('returns the balance for multiple tokens, for multiple addresses', async () => {
       const { contract, signers } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenB.mock.balanceOf.returns('1');
 
       const addresses = await Promise.all(signers.map(signer => signer.getAddress()));
@@ -91,10 +90,10 @@ describe('BalanceScanner', () => {
 
     it('does not fail when a token is invalid', async () => {
       const { contract, signers } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
 
       const addresses = await Promise.all(signers.map(signer => signer.getAddress()));
       const balances = signers.map(() => [BigNumber.from('1000'), BigNumber.from('0')]);
@@ -110,10 +109,10 @@ describe('BalanceScanner', () => {
       const { contract, signers } = await loadFixture(fixture);
       const address = await signers[0].getAddress();
 
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenB.mock.balanceOf.returns('1');
 
       await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toStrictEqual([
@@ -133,10 +132,10 @@ describe('BalanceScanner', () => {
       const { contract, signers } = await loadFixture(fixture);
       const address = await signers[0].getAddress();
 
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
 
       await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toStrictEqual([
         BigNumber.from('1000'),
