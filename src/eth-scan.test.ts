@@ -1,10 +1,9 @@
 import { waffle, ethers } from '@nomiclabs/buidler';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { Signer } from 'ethers';
+import ERC20Artifact from 'openzeppelin-solidity/build/contracts/IERC20.json';
 import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { abi } from '../artifacts/ERC20.json';
 import { BalanceScanner } from './contracts/BalanceScanner';
-import { Erc20 } from './contracts/Erc20';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
 
 const { deployContract, deployMockContract, loadFixture } = waffle;
@@ -18,11 +17,11 @@ export const fixture = async (
   signers: Signer[];
   addresses: string[];
   provider: MockProvider;
-  token: MockContract & Erc20;
+  token: MockContract;
 }> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
-  const token = (await deployMockContract(signer, abi)) as MockContract & Erc20;
+  const token = (await deployMockContract(signer, ERC20Artifact.abi)) as MockContract;
 
   const addresses = await Promise.all(signers.slice(1).map(s => s.getAddress()));
 
@@ -67,10 +66,10 @@ describe('eth-scan', () => {
   describe('getTokensBalances', () => {
     it('returns multiple token balances, for multiple addresses', async () => {
       const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
       await tokenB.mock.balanceOf.returns('1');
 
       const balances = await getTokensBalances(ethers.provider, addresses, [tokenA.address, tokenB.address], {
@@ -87,8 +86,8 @@ describe('eth-scan', () => {
 
     it('does not throw for invalid contracts', async () => {
       const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
 
       await expect(() =>
         getTokensBalances(ethers.provider, addresses, [tokenA.address, tokenB.address], {
@@ -101,10 +100,10 @@ describe('eth-scan', () => {
   describe('getTokensBalance', () => {
     it('returns multiple token balances for a single address', async () => {
       const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
       await tokenA.mock.balanceOf.returns('1000');
 
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
       await tokenB.mock.balanceOf.returns('1');
 
       const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {
@@ -119,8 +118,8 @@ describe('eth-scan', () => {
 
     it('does not throw for invalid contracts', async () => {
       const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
-      const tokenB = (await deployMockContract(signers[0], abi)) as MockContract & Erc20;
+      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
 
       await expect(() =>
         getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {

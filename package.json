@@ -46,7 +46,8 @@
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js,.jsx",
     "lint:solhint": "solhint -w 0 'contracts/**/*.sol'",
-    "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{ts,tsx,js,json,sol}'"
+    "lint:prettier": "prettier --check --ignore-path .gitignore '**/*.{ts,tsx,js,json,sol}'",
+    "estimate-gas": "ts-node --files scripts/estimate-gas.ts"
   },
   "dependencies": {
     "@findeth/abi": "^0.2.1",
@@ -86,6 +87,7 @@
     "husky": "^3.0.5",
     "jest": "^26.4.2",
     "lint-staged": "^9.2.5",
+    "openzeppelin-solidity": "https://github.com/OpenZeppelin/openzeppelin-contracts.git#solc-0.7",
     "prettier": "^1.19.1",
     "prettier-plugin-solidity": "^1.0.0-alpha.56",
     "rimraf": "^3.0.0",
