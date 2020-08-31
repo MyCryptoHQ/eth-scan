@@ -3,8 +3,6 @@
 pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
-import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
-
 /**
  * @title An Ether or token balance scanner
  * @author Maarten Zuidhoorn
@@ -83,14 +81,13 @@ contract BalanceScanner {
     * @return balance The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
       function
   */
-  function tokenBalance(address owner, address token) private view returns (uint256) {
+  function tokenBalance(address owner, address token) private view returns (uint256 balance) {
     uint256 size = codeSize(token);
 
     if (size > 0) {
-      try IERC20(token).balanceOf(owner) returns (uint256 balance) {
-        return balance;
-      } catch {
-        return 0;
+      (bool success, bytes memory data) = token.staticcall(abi.encodeWithSelector(bytes4(0x70a08231), owner));
+      if (success) {
+        (balance) = abi.decode(data, (uint256));
       }
     }
   }
