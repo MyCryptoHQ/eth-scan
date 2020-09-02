@@ -85,7 +85,7 @@ contract BalanceScanner {
     uint256 size = codeSize(token);
 
     if (size > 0) {
-      (bool success, bytes memory data) = token.staticcall(abi.encodeWithSelector(bytes4(0x70a08231), owner));
+      (bool success, bytes memory data) = token.staticcall(abi.encodeWithSignature("balanceOf(address)", owner));
       if (success) {
         (balance) = abi.decode(data, (uint256));
       }
