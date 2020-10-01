@@ -27,7 +27,7 @@ describe('BalanceScanner', () => {
       const addresses = await Promise.all(signers.slice(1).map((signer) => signer.getAddress()));
       const balances = await Promise.all(signers.slice(1).map((signer) => signer.getBalance()));
 
-      await expect(contract.etherBalances(addresses)).resolves.toStrictEqual(balances);
+      await expect(contract.etherBalances(addresses)).resolves.toEqual(balances);
     });
 
     it('returns an empty array when no addresses passed', async () => {
@@ -46,7 +46,7 @@ describe('BalanceScanner', () => {
       const addresses = await Promise.all(signers.slice(1).map((signer) => signer.getAddress()));
       const balances = await Promise.all(signers.slice(1).map((signer) => signer.getAddress().then(token.balanceOf)));
 
-      await expect(contract.tokenBalances(addresses, token.address)).resolves.toStrictEqual(balances);
+      await expect(contract.tokenBalances(addresses, token.address)).resolves.toEqual(balances);
     });
 
     it('returns an empty array when no addresses passed', async () => {
@@ -59,7 +59,7 @@ describe('BalanceScanner', () => {
       const { contract, signers, token } = await loadFixture(fixture);
       const address = await signers[0].getAddress();
 
-      await expect(contract.tokenBalances([address], token.address)).resolves.toStrictEqual([BigNumber.from('0')]);
+      await expect(contract.tokenBalances([address], token.address)).resolves.toEqual([BigNumber.from('0')]);
     });
   });
 
@@ -75,9 +75,7 @@ describe('BalanceScanner', () => {
       const addresses = await Promise.all(signers.map((signer) => signer.getAddress()));
       const balances = signers.map(() => [BigNumber.from('1000'), BigNumber.from('1')]);
 
-      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toStrictEqual(
-        balances
-      );
+      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toEqual(balances);
     });
 
     it('returns an empty array when no addresses passed', async () => {
@@ -98,9 +96,7 @@ describe('BalanceScanner', () => {
       const addresses = await Promise.all(signers.map((signer) => signer.getAddress()));
       const balances = signers.map(() => [BigNumber.from('1000'), BigNumber.from('0')]);
 
-      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toStrictEqual(
-        balances
-      );
+      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toEqual(balances);
     });
   });
 
@@ -115,7 +111,7 @@ describe('BalanceScanner', () => {
       const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
       await tokenB.mock.balanceOf.returns('1');
 
-      await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toStrictEqual([
+      await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toEqual([
         BigNumber.from('1000'),
         BigNumber.from('1')
       ]);
@@ -137,7 +133,7 @@ describe('BalanceScanner', () => {
 
       const tokenB = (await deployMockContract(signers[0], IERC20Artifact.abi)) as MockContract;
 
-      await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toStrictEqual([
+      await expect(contract.tokensBalance(address, [tokenA.address, tokenB.address])).resolves.toEqual([
         BigNumber.from('1000'),
         BigNumber.from('0')
       ]);
