@@ -14,7 +14,7 @@
   ],
   "main": "lib/cjs/index.js",
   "module": "lib/es/index.js",
-  "typings": "typings/index.d.ts",
+  "typings": "typings/src/index.d.ts",
   "repository": "https://github.com/MyCryptoHQ/eth-scan.git",
   "author": "MyCrypto",
   "contributors": [
