@@ -33,7 +33,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
 
       - name: Compile Contracts
         run: yarn compile
@@ -67,7 +67,10 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Compile Contracts
+        run: yarn compile
 
       - name: Lint TypeScript
         run: yarn lint:tsc
@@ -104,7 +107,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
 
       - name: Compile Contracts
         run: yarn compile
