@@ -31,7 +31,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --ignore-scripts
 
       - name: Compile Contracts
         run: yarn compile
