@@ -23,7 +23,7 @@ export const fixture = async (
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
   const token = (await deployMockContract(signer, ERC20Artifact.abi)) as MockContract;
 
-  const addresses = await Promise.all(signers.slice(1).map(s => s.getAddress()));
+  const addresses = await Promise.all(signers.slice(1).map((s) => s.getAddress()));
 
   return { contract, signers, addresses, provider, token };
 };

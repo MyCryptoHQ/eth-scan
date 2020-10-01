@@ -17,7 +17,7 @@ export default class Web3 {
           to,
           data
         })
-        .then(result => {
+        .then((result) => {
           callback(null, {
             id,
             jsonrpc,
