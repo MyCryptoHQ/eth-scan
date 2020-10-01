@@ -43,7 +43,7 @@ export const encodeWithId = (id: string, types: string[], ...data: unknown[]): s
  * @param {Buffer} buffer The buffer to encode.
  * @return {string} The hexadecimal string.
  */
-export const bufferToString = (buffer: Buffer): string => {
+export const bufferToString = (buffer: Buffer | Uint8Array): string => {
   return new Uint8Array(buffer).reduce<string>((current, next) => {
     return current + HEXADECIMAL_CHARACTERS[next >> 4] + HEXADECIMAL_CHARACTERS[next & 15];
   }, '0x');
