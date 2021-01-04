@@ -1,6 +1,6 @@
 import { waffle } from '@nomiclabs/buidler';
+import ERC20Mock from '@openzeppelin/contracts/build/contracts/ERC20.json';
 import { BigNumber } from 'ethers';
-import ERC20Mock from 'openzeppelin-solidity/build/contracts/ERC20Mock.json';
 import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
 import { BalanceScanner } from '../src/contracts/BalanceScanner';
 
