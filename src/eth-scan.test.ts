@@ -1,7 +1,7 @@
 import { waffle, ethers } from '@nomiclabs/buidler';
+import ERC20Artifact from '@openzeppelin/contracts/build/contracts/IERC20.json';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { Signer } from 'ethers';
-import ERC20Artifact from 'openzeppelin-solidity/build/contracts/IERC20.json';
 import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
 import { BalanceScanner } from './contracts/BalanceScanner';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
