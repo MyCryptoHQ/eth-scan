@@ -1,11 +1,13 @@
-import { waffle } from '@nomiclabs/buidler';
 import IERC20Artifact from '@openzeppelin/contracts/build/contracts/IERC20.json';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { BigNumber, Signer } from 'ethers';
-import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { BalanceScanner } from '../src/contracts/BalanceScanner';
+import { waffle } from 'hardhat';
+import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
+import { BalanceScanner } from '../src/contracts';
 
-const { deployContract, deployMockContract, loadFixture } = waffle;
+const { deployContract, deployMockContract, createFixtureLoader, provider } = waffle;
+
+const loadFixture = createFixtureLoader(provider.getWallets(), provider);
 
 /**
  * Low-level tests for the contract itself, using direct contract interactions. For the library itself, you can refer

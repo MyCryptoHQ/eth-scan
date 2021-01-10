@@ -10,18 +10,13 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version:
-          - 12
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12
           registry-url: 'https://registry.npmjs.org'
 
       - name: Cache Dependencies
@@ -36,8 +31,11 @@ jobs:
       - name: Compile Contracts
         run: yarn compile
 
-      - name: Build
-        run: yarn build
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
 
       - name: Deploy
         run: yarn publish

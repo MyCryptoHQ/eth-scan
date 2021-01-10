@@ -1,4 +1,4 @@
-import { ethers, waffle } from '@nomiclabs/buidler';
+import { ethers, waffle } from 'hardhat';
 import { ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE } from '../constants';
 import { fixture } from '../eth-scan.test';
 import { decode, encodeWithId } from '../utils';
@@ -6,7 +6,9 @@ import { callWithHttp, isHttpProvider } from './http';
 
 jest.mock('isomorphic-unfetch');
 
-const { loadFixture } = waffle;
+const { createFixtureLoader, provider } = waffle;
+
+const loadFixture = createFixtureLoader(provider.getWallets(), provider);
 
 describe('isHttpProvider', () => {
   it('checks if a provider is an HTTP provider', () => {

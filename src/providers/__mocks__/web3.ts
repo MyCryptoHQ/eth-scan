@@ -1,4 +1,4 @@
-import { ethers } from '@nomiclabs/buidler';
+import { ethers } from 'hardhat';
 import { JsonRpcPayload } from '../http';
 
 export default class Web3 {
