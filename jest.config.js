@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: 'node',
   roots: ['src/', 'tests/'],
   clearMocks: true,
   collectCoverageFrom: ['**/*.ts?(x)', '!**/*.d.ts', '!src/contracts/**/*', '!src/vendor/**/*'],

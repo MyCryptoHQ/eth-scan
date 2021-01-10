@@ -1,10 +1,12 @@
-import { ethers, waffle } from '@nomiclabs/buidler';
+import { ethers, waffle } from 'hardhat';
 import { ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE } from '../constants';
 import { fixture } from '../eth-scan.test';
 import { decode, encodeWithId } from '../utils';
 import { callWithEthers, isEthersProvider } from './ethers';
 
-const { loadFixture } = waffle;
+const { createFixtureLoader, provider } = waffle;
+
+const loadFixture = createFixtureLoader(provider.getWallets(), provider);
 
 describe('isEthersProvider', () => {
   it('checks if a provider is an Ethers.js provider', () => {

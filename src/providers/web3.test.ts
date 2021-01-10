@@ -1,4 +1,4 @@
-import { ethers, waffle } from '@nomiclabs/buidler';
+import { ethers, waffle } from 'hardhat';
 import Web3 from 'web3';
 import { ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE } from '../constants';
 import { fixture } from '../eth-scan.test';
@@ -7,7 +7,9 @@ import { callWithWeb3, isWeb3Provider, Web3ProviderLike } from './web3';
 
 jest.mock('web3');
 
-const { loadFixture } = waffle;
+const { createFixtureLoader, provider } = waffle;
+
+const loadFixture = createFixtureLoader(provider.getWallets(), provider);
 
 describe('isWeb3Provider', () => {
   it('checks if a provider is an HTTP provider', () => {

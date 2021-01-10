@@ -1,12 +1,14 @@
-import { waffle, ethers } from '@nomiclabs/buidler';
 import ERC20Artifact from '@openzeppelin/contracts/build/contracts/IERC20.json';
 import { MockContract, MockProvider } from 'ethereum-waffle';
 import { Signer } from 'ethers';
-import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { BalanceScanner } from './contracts/BalanceScanner';
+import { waffle, ethers } from 'hardhat';
+import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
+import { BalanceScanner } from './contracts';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
 
-const { deployContract, deployMockContract, loadFixture } = waffle;
+const { deployContract, deployMockContract, createFixtureLoader, provider } = waffle;
+
+const loadFixture = createFixtureLoader(provider.getWallets(), provider);
 
 // eslint-disable-next-line jest/no-export
 export const fixture = async (
@@ -21,7 +23,7 @@ export const fixture = async (
 }> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
-  const token = (await deployMockContract(signer, ERC20Artifact.abi)) as MockContract;
+  const token = await deployMockContract(signer, ERC20Artifact.abi);
 
   const addresses = await Promise.all(signers.slice(1).map((s) => s.getAddress()));
 

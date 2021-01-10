@@ -13,9 +13,9 @@
     "resolveJsonModule": true
   },
   "files": [
-    "node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
-    "node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts"
+    "node_modules/@nomiclabs/hardhat-ethers/dist/src/type-extensions.d.ts",
+    "node_modules/@nomiclabs/hardhat-waffle/dist/src/type-extensions.d.ts"
   ],
-  "include": ["src", "tests", "scripts", "./buidler.config.ts"],
+  "include": ["src", "tests", "scripts", "./hardhat.config.ts"],
   "exclude": ["node_modules"]
 }

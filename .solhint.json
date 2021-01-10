@@ -2,6 +2,7 @@
   "extends": "solhint:recommended",
   "rules": {
     "compiler-version": ["error", "^0.7.0"],
+    "indent": ["error", 2],
     "modifier-name-mixedcase": "error",
     "func-param-name-mixedcase": "error",
     "func-visibility": ["error", { "ignoreConstructors": true }],

@@ -10,40 +10,6 @@ on:
       - 'master'
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Cache Dependencies
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: yarn-${{ hashFiles('yarn.lock') }}
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts
-
-      - name: Compile Contracts
-        run: yarn compile
-
-      - name: Test
-        run: yarn test --coverage
-
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v1
-
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -72,20 +38,20 @@ jobs:
       - name: Compile Contracts
         run: yarn compile
 
-      - name: Lint TypeScript
-        run: yarn lint:tsc
+      - name: Lint Types
+        run: yarn lint:types
 
-      - name: ESLint
-        run: yarn lint:eslint
+      - name: Lint Source
+        run: yarn lint:source
 
-      - name: Solhint
-        run: yarn lint:solhint
+      - name: Lint Solidity
+        run: yarn lint:solidity
 
-      - name: Prettier
-        run: yarn lint:prettier
+      - name: Lint Formatting
+        run: yarn lint:format
 
-  build:
-    name: Build
+  test:
+    name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -95,7 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node-version }}
@@ -112,5 +78,8 @@ jobs:
       - name: Compile Contracts
         run: yarn compile
 
-      - name: Build Source Files
-        run: yarn build
+      - name: Test
+        run: yarn test --coverage
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v1
