@@ -1,8 +1,8 @@
 import ERC20Mock from '@openzeppelin/contracts/build/contracts/ERC20.json';
 import { BigNumber } from 'ethers';
 import { waffle } from 'hardhat';
-import BalanceScannerArtifact from '../artifacts/BalanceScanner.json';
-import { BalanceScanner } from '../src/contracts/BalanceScanner';
+import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
+import { BalanceScanner } from '../src/contracts';
 
 const { deployContract } = waffle;
 
