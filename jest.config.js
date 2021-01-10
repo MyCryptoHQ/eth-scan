@@ -5,5 +5,6 @@ module.exports = {
   collectCoverageFrom: ['**/*.ts?(x)', '!**/*.d.ts', '!src/contracts/**/*', '!src/vendor/**/*'],
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest'
-  }
+  },
+  testTimeout: 20000
 };
