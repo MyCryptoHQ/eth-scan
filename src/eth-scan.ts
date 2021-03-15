@@ -1,3 +1,4 @@
+import { encode } from '@findeth/abi';
 import { callSingle, toNestedBalanceMap } from './api';
 import {
   ETHER_BALANCES_ID,
@@ -8,8 +9,8 @@ import {
   TOKENS_BALANCE_TYPE
 } from './constants';
 import { ProviderLike } from './providers';
-import { BalanceMap, EthScanOptions } from './types';
-import { encodeWithId } from './utils';
+import type { BalanceMap, EthScanOptions } from './types';
+import { withId } from './utils/abi';
 
 /**
  * Get the Ether balances for the addresses specified.
@@ -27,7 +28,7 @@ export const getEtherBalances = (
   return callSingle(
     provider,
     addresses,
-    (batch) => encodeWithId(ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, batch),
+    (batch) => withId(ETHER_BALANCES_ID, encode(ETHER_BALANCES_TYPE, [batch])),
     options
   );
 };
@@ -51,7 +52,7 @@ export const getTokenBalances = async (
   return callSingle(
     provider,
     addresses,
-    (batch) => encodeWithId(TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE, batch, tokenAddress),
+    (batch) => withId(TOKEN_BALANCES_ID, encode(TOKEN_BALANCES_TYPE, [batch, tokenAddress])),
     options
   );
 };
@@ -97,7 +98,7 @@ export const getTokensBalance = (
   return callSingle(
     provider,
     tokenAddresses,
-    (batch) => encodeWithId(TOKENS_BALANCE_ID, TOKENS_BALANCE_TYPE, address, batch),
+    (batch) => withId(TOKENS_BALANCE_ID, encode(TOKENS_BALANCE_TYPE, [address, batch])),
     options
   );
 };
