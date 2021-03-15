@@ -47,7 +47,7 @@
     "estimate-gas": "ts-node --files scripts/estimate-gas.ts"
   },
   "dependencies": {
-    "@findeth/abi": "^0.3.1",
+    "@findeth/abi": "^0.5.2",
     "isomorphic-unfetch": "^3.1.0"
   },
   "devDependencies": {
@@ -75,6 +75,7 @@
     "babel-preset-minify": "^0.5.1",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
+    "eip1193-provider": "^1.0.1",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-import": "^2.22.1",
@@ -92,7 +93,7 @@
     "solhint": "^3.3.2",
     "ts-node": "^9.0.0",
     "typechain": "^4.0.1",
-    "typescript": "^4.0.3",
+    "typescript": "^4.2.3",
     "web3": "^1.3.1"
   },
   "lint-staged": {

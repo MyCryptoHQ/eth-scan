@@ -1,99 +1,67 @@
 import fetch from 'isomorphic-unfetch';
-import { stringToBuffer } from '../utils';
+import type { EthCallJsonRpcPayload, JsonRpcResult, Provider } from '../types';
 
-interface HttpProviderWithOptions {
+interface HttpProviderOptions {
   url: string;
-  params?: Partial<Omit<RequestInit, 'body' | 'method'>>;
+  params?: Partial<Omit<RequestInit, 'body' | 'method' | 'headers'>>;
 }
 
-export type HttpProviderLike = string | HttpProviderWithOptions;
-
-export interface JsonRpcPayload {
-  jsonrpc: string;
-  method: string;
-  params: unknown[];
-  id?: string | number;
-}
-
-export interface JsonRpcResult<T> {
-  id: number;
-  jsonrpc: string;
-  result: T;
-  error?: {
-    code: number;
-    message: string;
-    data: string;
-  };
-}
+export type HttpProviderLike = string | HttpProviderOptions;
 
 /**
- * Check if an object is a valid HttpProviderLike object.
- *
- * @param {any} provider
- * @return {boolean}
+ * A raw HTTP provider, which can be used with an Ethereum node endpoint (JSON-RPC), or an `HttpProviderOptions` object.
  */
-export const isHttpProvider = (provider: unknown): provider is HttpProviderLike => {
-  return (
-    typeof provider === 'string' ||
-    (typeof provider === 'object' && (provider as HttpProviderWithOptions).url !== undefined)
-  );
-};
+const provider: Provider<HttpProviderLike> = {
+  isProvider: (provider: unknown): provider is HttpProviderLike => {
+    return (
+      typeof provider === 'string' ||
+      (typeof provider === 'object' && (provider as HttpProviderOptions).url !== undefined)
+    );
+  },
 
-/**
- * Call the contract with the HTTP provider. This throws an error if the call failed.
- *
- * @param {HttpProviderLike} provider
- * @param {string} contractAddress
- * @param {string} data
- * @return {Promise<Buffer>}
- */
-export const callWithHttp = async (
-  provider: HttpProviderLike,
-  contractAddress: string,
-  data: string
-): Promise<Buffer> => {
-  const url = typeof provider === 'string' ? provider : provider.url;
-  const options = typeof provider === 'object' ? provider.params : {};
+  call: async (provider: HttpProviderLike, contractAddress: string, data: string): Promise<string> => {
+    const url = typeof provider === 'string' ? provider : provider.url;
+    const options = typeof provider === 'object' ? provider.params : {};
+    const payload = getPayload(contractAddress, data);
 
-  const payload = getPayload(contractAddress, data);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      cache: 'no-cache',
+      ...options
+    });
 
-  const body = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload),
-    cache: 'no-cache',
-    ...options
-  });
+    if (!response.ok) {
+      throw new Error(`Contract call failed with HTTP error ${response.status}: ${response.statusText}`);
+    }
 
-  const response: JsonRpcResult<string> = await body.json();
+    const { error, result }: JsonRpcResult<string> = await response.json();
+    if (error) {
+      throw new Error(`Contract call failed: ${error.message}`);
+    }
 
-  if (response.error) {
-    throw new Error(`Contract call failed: ${response.error.message}`);
+    return result;
   }
-
-  return stringToBuffer(response.result);
 };
+
+export default provider;
 
 /**
  * Get the JSON-RPC payload for the `eth_call` function.
- *
- * @param {string} to The address to send the call to, as a hexadecimal string.
- * @param {string} data The data to send to the address, as a hexadecimal string.
  */
-export const getPayload = <Data>(to: string, data: Data): JsonRpcPayload => {
-  return {
-    jsonrpc: '2.0',
-    method: 'eth_call',
-    params: [
-      {
-        to,
-        data
-      },
-      'latest'
-    ],
-    id: 1
-  };
-};
+export const getPayload = (to: string, data: string): EthCallJsonRpcPayload => ({
+  jsonrpc: '2.0',
+  method: 'eth_call',
+  params: [
+    {
+      to,
+      data
+    },
+    'latest'
+  ],
+  id: 1
+});

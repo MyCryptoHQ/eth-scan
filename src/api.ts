@@ -1,7 +1,8 @@
+import { decode } from '@findeth/abi';
 import { BATCH_SIZE, CONTRACT_ADDRESS } from './constants';
 import { call, ProviderLike } from './providers';
 import { BalanceMap, EthScanOptions } from './types';
-import { batch, decode } from './utils';
+import { batch } from './utils';
 
 /**
  * Get a balance map from an array of addresses and an array of balances.
@@ -61,7 +62,7 @@ export const callSingle = async (
     async (batchedAddresses: string[]) => {
       const data = encodeData(batchedAddresses);
 
-      return decode<[Array<bigint>]>(['uint256[]'], await call(provider, contractAddress, data))[0];
+      return decode(['uint256[]'], await call(provider, contractAddress, data))[0];
     },
     batchSize,
     addresses
@@ -84,7 +85,7 @@ export const callMultiple = async (
     async (batchedAddresses: string[]) => {
       const data = encodeData(batchedAddresses, otherAddresses);
 
-      return decode<[Array<Array<bigint>>]>(['uint256[][]'], await call(provider, contractAddress, data))[0];
+      return decode(['uint256[][]'], await call(provider, contractAddress, data))[0] as Array<Array<bigint>>;
     },
     batchSize,
     addresses

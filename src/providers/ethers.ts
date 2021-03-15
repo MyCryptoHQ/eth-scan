@@ -1,4 +1,4 @@
-import { stringToBuffer } from '../utils';
+import type { Provider } from '../types';
 
 type BlockTag = string | number;
 
@@ -12,36 +12,21 @@ export interface EthersProviderLike {
 }
 
 /**
- * Check if an object is a valid EthersProviderLike object.
- *
- * @param {any} provider
- * @return {boolean}
+ * Ethers.js provider, which can be used with an instance of the Ethers.js Provider class.
  */
-export const isEthersProvider = (provider: unknown): provider is EthersProviderLike => {
-  return (provider as EthersProviderLike)?.call !== undefined;
-};
+const provider: Provider<EthersProviderLike> = {
+  isProvider: (provider: unknown): provider is EthersProviderLike => {
+    return (provider as EthersProviderLike)?.call !== undefined;
+  },
 
-/**
- * Call the contract with an Ethers provider. This throws an error if the call failed.
- *
- * @param {EthersProviderLike} provider
- * @param {string} contractAddress
- * @param {string} data
- * @return {Promise<Buffer>}
- */
-export const callWithEthers = async (
-  provider: EthersProviderLike,
-  contractAddress: string,
-  data: string
-): Promise<Buffer> => {
-  const transaction: TransactionRequest = {
-    to: contractAddress,
-    data
-  };
+  call: async (provider: EthersProviderLike, contractAddress: string, data: string): Promise<string> => {
+    const transaction: TransactionRequest = {
+      to: contractAddress,
+      data
+    };
 
-  try {
-    return stringToBuffer(await provider.call(transaction, 'latest'));
-  } catch (error) {
-    throw new Error(`Contract call failed: ${error.message ?? error.toString()}`);
+    return provider.call(transaction, 'latest');
   }
 };
+
+export default provider;
