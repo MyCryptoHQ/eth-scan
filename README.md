@@ -2,7 +2,7 @@
 
 `eth-scan` is a library written in TypeScript, to help you fetch Ether or (ERC-20) token balances for multiple addresses in an efficient way. The library uses a smart contract to fetch the balances in a single call to a node. The contract is currently deployed at [0x571C62a1c863aEAD01c1d34D8cB3Ee2c6f938800](https://etherscan.io/address/0x571C62a1c863aEAD01c1d34D8cB3Ee2c6f938800) on the Ethereum mainnet, Goerli, Kovan, Rinkeby, Ropsten, and xDai.
 
-It can use Web3.js, Ethers.js or regular HTTP as provider to get the balances. See [Getting Started](#getting-started) for more info.
+It can use Web3.js, Ethers.js, JSON-RPC (HTTP), or a EIP-1193-compatible provider to get the balances. See [Getting Started](#getting-started) for more info.
 
 **Note**: Even though `eth_call` doesn't use any gas, the block gas limit still applies, and the maximum number of addresses you can fetch in a single call is limited. By default this library batches calls per 1000 addresses.
 
