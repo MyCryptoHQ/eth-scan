@@ -52,7 +52,7 @@ Results in:
 
 Get Ether balances for `addresses`.
 
-* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider, JSONRPC endpoint, or EIP-1193 compatible provider
 
 * `addresses` \<string[]\> - An array of addresses as hexadecimal string.
 
@@ -64,7 +64,7 @@ Get Ether balances for `addresses`.
 
 Get ERC-20 token balances from `token` for `addresses`. This does not check if the address specified is a token and will throw an error if it isn't.
 
-* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider, JSONRPC endpoint, or EIP-1193 compatible provider
 
 * `addresses` \<string[]\> - An array of addresses as hexadecimal string.
 
@@ -78,7 +78,7 @@ Get ERC-20 token balances from `token` for `addresses`. This does not check if t
 
 Get ERC-20 token balances from `tokens` for `address`. If one of the token addresses specified is not a token, a balance of 0 will be used.
 
-* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider, JSONRPC endpoint, or EIP-1193 compatible provider
 
 * `address` \<string\> - The address to get token balances for.
 
@@ -90,7 +90,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ## `getTokensBalances(provider, addresses, tokens, options)`
 
-* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider or JSONRPC endpoint.
+* `provider` \<[Provider](#providers)\> - A Web3 instance, Ethers.js provider, JSONRPC endpoint, or EIP-1193 compatible provider.
 
 * `addresses` \<string[]\> - An array of addresses as hexadecimal string.
 
@@ -108,15 +108,16 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ### `BalanceMap`
 
-A `BalanceMap` is an object with an address as key and a [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) as value.
+A `BalanceMap` is an object with an address as key and a [bigint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) as value.
 
 ### Providers
 
-Currently, `eth-scan` has support for three different providers:
+Currently, `eth-scan` has support for four different providers:
 
 * Ethers.js, by using an existing Ethers.js provider
 * Web3, by using an instance of the `Web3` class
 * HTTP, by using a URL of a JSONRPC endpoint as string
+* EIP-1193 compatible provider, like `window.ethereum`
 
 ## Compatiblity
 
