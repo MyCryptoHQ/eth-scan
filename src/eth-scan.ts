@@ -10,7 +10,7 @@ import {
 } from './constants';
 import { ProviderLike } from './providers';
 import type { BalanceMap, EthScanOptions } from './types';
-import { withId } from './utils/abi';
+import { withId } from './utils';
 
 /**
  * Get the Ether balances for the addresses specified.
