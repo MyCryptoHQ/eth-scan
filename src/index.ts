@@ -4,3 +4,5 @@ export * from './utils';
 export * from './api';
 export * from './eth-scan';
 export * from './types';
+
+export { encode } from '@findeth/abi';
