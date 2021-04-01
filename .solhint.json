@@ -1,7 +1,7 @@
 {
   "extends": "solhint:recommended",
   "rules": {
-    "compiler-version": ["error", "^0.7.0"],
+    "compiler-version": ["error", "0.8.3"],
     "indent": ["error", 2],
     "modifier-name-mixedcase": "error",
     "func-param-name-mixedcase": "error",

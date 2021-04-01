@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.7.2;
+pragma solidity 0.8.3;
 pragma experimental ABIEncoderV2;
 
 /**
@@ -85,7 +85,9 @@ contract BalanceScanner {
     uint256 size = codeSize(token);
 
     if (size > 0) {
-      (bool success, bytes memory data) = token.staticcall(abi.encodeWithSignature("balanceOf(address)", owner));
+      (bool success, bytes memory data) = token.staticcall{ gas: 20000 }(
+        abi.encodeWithSignature("balanceOf(address)", owner)
+      );
       if (success) {
         (balance) = abi.decode(data, (uint256));
       }
