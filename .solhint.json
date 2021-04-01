@@ -1,8 +1,9 @@
 {
   "extends": "solhint:recommended",
   "rules": {
+    "bracket-align": false,
     "compiler-version": ["error", "0.8.3"],
-    "indent": ["error", 2],
+    "indent": false,
     "modifier-name-mixedcase": "error",
     "func-param-name-mixedcase": "error",
     "func-visibility": ["error", { "ignoreConstructors": true }],

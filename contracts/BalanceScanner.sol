@@ -88,6 +88,7 @@ contract BalanceScanner {
       (bool success, bytes memory data) = token.staticcall{ gas: 20000 }(
         abi.encodeWithSignature("balanceOf(address)", owner)
       );
+
       if (success) {
         (balance) = abi.decode(data, (uint256));
       }
