@@ -66,45 +66,6 @@ describe('BalanceScanner', () => {
     });
   });
 
-  describe('tokensBalances', () => {
-    it('returns the balance for multiple tokens, for multiple addresses', async () => {
-      const { contract, signers } = await loadFixture(fixture);
-
-      const tokenA = await deployMockContract(signers[0], IERC20Artifact.abi);
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = await deployMockContract(signers[0], IERC20Artifact.abi);
-      await tokenB.mock.balanceOf.returns('1');
-
-      const addresses = await Promise.all(signers.map((signer) => signer.getAddress()));
-      const balances = signers.map(() => [BigNumber.from('1000'), BigNumber.from('1')]);
-
-      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toEqual(balances);
-    });
-
-    it('returns an empty array when no addresses passed', async () => {
-      const { contract, signers, token } = await loadFixture(fixture);
-      const address = await signers[0].getAddress();
-
-      await expect(contract.tokensBalances([], [token.address])).resolves.toStrictEqual([]);
-      await expect(contract.tokensBalances([address], [])).resolves.toStrictEqual([[]]);
-    });
-
-    it('does not fail when a token is invalid', async () => {
-      const { contract, signers } = await loadFixture(fixture);
-
-      const tokenA = await deployMockContract(signers[0], IERC20Artifact.abi);
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = await deployMockContract(signers[0], IERC20Artifact.abi);
-
-      const addresses = await Promise.all(signers.map((signer) => signer.getAddress()));
-      const balances = signers.map(() => [BigNumber.from('1000'), BigNumber.from('0')]);
-
-      await expect(contract.tokensBalances(addresses, [tokenA.address, tokenB.address])).resolves.toEqual(balances);
-    });
-  });
-
   describe('tokensBalance', () => {
     it('returns the token balance for multiple tokens, for a single address', async () => {
       const { contract, signers } = await loadFixture(fixture);
