@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity 0.8.3;
-pragma experimental ABIEncoderV2;
 
 /**
  * @title An Ether or token balance scanner
@@ -79,7 +78,8 @@ contract BalanceScanner {
     * @param owner The address of the token owner
     * @param token The address of the ERC-20 token contract
     * @return balance The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
-      function
+      function. This will also be zero if the target contract tries to modify the state, e.g., when using certain proxy
+      contracts.
   */
   function tokenBalance(address owner, address token) private view returns (uint256 balance) {
     uint256 size = codeSize(token);
