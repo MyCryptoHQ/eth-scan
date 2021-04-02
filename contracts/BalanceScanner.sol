@@ -36,7 +36,8 @@ contract BalanceScanner {
     balances = new uint256[](addresses.length);
 
     for (uint256 i = 0; i < addresses.length; i++) {
-      balances[i] = tokenBalance(addresses[i], token);
+      bytes memory data = abi.encodeWithSignature("balanceOf(address)", addresses[i]);
+      balances[i] = tokenBalance(token, data);
     }
   }
 
@@ -68,30 +69,62 @@ contract BalanceScanner {
   function tokensBalance(address owner, address[] calldata contracts) public view returns (uint256[] memory balances) {
     balances = new uint256[](contracts.length);
 
+    bytes memory data = abi.encodeWithSignature("balanceOf(address)", owner);
     for (uint256 i = 0; i < contracts.length; i++) {
-      balances[i] = tokenBalance(owner, contracts[i]);
+      balances[i] = tokenBalance(contracts[i], data);
+    }
+  }
+
+  /**
+   * @notice Call multiple contracts with the provided arbitrary data
+   * @param contracts The contracts to call
+   * @param data The data to call the contracts with
+   * @return output The raw result of the contract calls
+   */
+  function call(address[] calldata contracts, bytes[] calldata data) public view returns (bytes[] memory output) {
+    require(contracts.length == data.length, "Length must be equal");
+    output = new bytes[](contracts.length);
+
+    for (uint256 i = 0; i < contracts.length; i++) {
+      (bool success, bytes memory result) = staticCall(contracts[i], data[i], gasleft());
+      if (success) {
+        output[i] = result;
+      }
     }
   }
 
   /**
     * @notice Get the ERC-20 token balance for a single contract
-    * @param owner The address of the token owner
     * @param token The address of the ERC-20 token contract
+    * @param data The data to call the token with
     * @return balance The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
       function. This will also be zero if the target contract tries to modify the state, e.g., when using certain proxy
-      contracts.
+      contracts
   */
-  function tokenBalance(address owner, address token) private view returns (uint256 balance) {
-    uint256 size = codeSize(token);
+  function tokenBalance(address token, bytes memory data) private view returns (uint256 balance) {
+    (bool success, bytes memory result) = staticCall(token, data, 20000);
+
+    if (success) {
+      (balance) = abi.decode(result, (uint256));
+    }
+  }
+
+  /**
+   * @notice Static call a contract with the provided data
+   * @param target The address of the contract to call
+   * @param data The data to call the contract with
+   * @return success Whether the call succeeded
+   * @return result The returned data from the contract, or an empty byte array if the contract call failed
+   */
+  function staticCall(
+    address target,
+    bytes memory data,
+    uint256 gas
+  ) private view returns (bool success, bytes memory result) {
+    uint256 size = codeSize(target);
 
     if (size > 0) {
-      (bool success, bytes memory data) = token.staticcall{ gas: 20000 }(
-        abi.encodeWithSignature("balanceOf(address)", owner)
-      );
-
-      if (success) {
-        (balance) = abi.decode(data, (uint256));
-      }
+      (success, result) = target.staticcall{ gas: gas }(data);
     }
   }
 
