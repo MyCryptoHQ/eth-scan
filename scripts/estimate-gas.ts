@@ -61,7 +61,7 @@ const estimateGas = async (): Promise<Results> => {
    */
   const estimateGetTokenBalancesGas = async (): Promise<GasResults> => {
     // Deploys token contract and assigns balance to address
-    const token = await deployContract(wallets[0], ERC20Mock, ['Test Token', 'TEST', wallets[0].address, '100']);
+    const token = await deployContract(wallets[0], ERC20Mock, ['Test Token', 'TEST']);
 
     const estimations = await addresses.reduce<Promise<number[]>>(async (array, _, index) => {
       const previous = await array;
@@ -79,7 +79,7 @@ const estimateGas = async (): Promise<Results> => {
    */
   const estimateGetTokensBalanceGas = async (): Promise<GasResults> => {
     // Deploys token contract and assigns balance to address
-    const token = await deployContract(wallets[0], ERC20Mock, ['Test Token', 'TEST', wallets[0].address, '100']);
+    const token = await deployContract(wallets[0], ERC20Mock, ['Test Token', 'TEST']);
 
     const estimations = await addresses.reduce<Promise<number[]>>(async (array, _, index) => {
       const previous = await array;
