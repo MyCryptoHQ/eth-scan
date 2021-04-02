@@ -94,6 +94,7 @@ contract BalanceScanner {
    * @notice Static call a contract with the provided data
    * @param target The address of the contract to call
    * @param data The data to call the contract with
+   * @param gas The amount of gas to forward to the call
    * @return success Whether the call succeeded
    * @return result The returned data from the contract, or an empty byte array if the contract call failed
    */
