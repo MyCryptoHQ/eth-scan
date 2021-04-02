@@ -7,7 +7,7 @@ import 'hardhat-typechain';
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   solidity: {
-    version: '0.7.2',
+    version: '0.8.3',
     settings: {
       optimizer: {
         enabled: true,
