@@ -8,6 +8,11 @@ pragma solidity 0.8.3;
  * @author Luit Hollander
  */
 contract BalanceScanner {
+  struct Result {
+    bool success;
+    bytes data;
+  }
+
   /**
    * @notice Get the Ether balance for all addresses specified
    * @param addresses The addresses to get the Ether balance for
@@ -26,18 +31,14 @@ contract BalanceScanner {
    * @dev This does not check if the `token` address specified is actually an ERC-20 token
    * @param addresses The addresses to get the token balance for
    * @param token The address of the ERC-20 token contract
-   * @return balances The token balance for all addresses in the same order as specified
+   * @return results The token balance for all addresses in the same order as specified
    */
-  function tokenBalances(address[] calldata addresses, address token)
-    external
-    view
-    returns (uint256[] memory balances)
-  {
-    balances = new uint256[](addresses.length);
+  function tokenBalances(address[] calldata addresses, address token) external view returns (Result[] memory results) {
+    results = new Result[](addresses.length);
 
     for (uint256 i = 0; i < addresses.length; i++) {
       bytes memory data = abi.encodeWithSignature("balanceOf(address)", addresses[i]);
-      balances[i] = tokenBalance(token, data);
+      results[i] = staticCall(token, data, 20000);
     }
   }
 
@@ -45,14 +46,14 @@ contract BalanceScanner {
    * @notice Get the ERC-20 token balance from multiple contracts for a single owner
    * @param owner The address of the token owner
    * @param contracts The addresses of the ERC-20 token contracts
-   * @return balances The token balances in the same order as the addresses specified
+   * @return results The token balances in the same order as the addresses specified
    */
-  function tokensBalance(address owner, address[] calldata contracts) public view returns (uint256[] memory balances) {
-    balances = new uint256[](contracts.length);
+  function tokensBalance(address owner, address[] calldata contracts) external view returns (Result[] memory results) {
+    results = new Result[](contracts.length);
 
     bytes memory data = abi.encodeWithSignature("balanceOf(address)", owner);
     for (uint256 i = 0; i < contracts.length; i++) {
-      balances[i] = tokenBalance(contracts[i], data);
+      results[i] = staticCall(contracts[i], data, 20000);
     }
   }
 
@@ -60,33 +61,29 @@ contract BalanceScanner {
    * @notice Call multiple contracts with the provided arbitrary data
    * @param contracts The contracts to call
    * @param data The data to call the contracts with
-   * @return output The raw result of the contract calls
+   * @return results The raw result of the contract calls
    */
-  function call(address[] calldata contracts, bytes[] calldata data) public view returns (bytes[] memory output) {
-    require(contracts.length == data.length, "Length must be equal");
-    output = new bytes[](contracts.length);
-
-    for (uint256 i = 0; i < contracts.length; i++) {
-      (bool success, bytes memory result) = staticCall(contracts[i], data[i], gasleft());
-      if (success) {
-        output[i] = result;
-      }
-    }
+  function call(address[] calldata contracts, bytes[] calldata data) public view returns (Result[] memory results) {
+    return call(contracts, data, gasleft());
   }
 
   /**
-    * @notice Get the ERC-20 token balance for a single contract
-    * @param token The address of the ERC-20 token contract
-    * @param data The data to call the token with
-    * @return balance The token balance, or zero if the address is not a contract, or does not implement the `balanceOf`
-      function. This will also be zero if the target contract tries to modify the state, e.g., when using certain proxy
-      contracts
-  */
-  function tokenBalance(address token, bytes memory data) private view returns (uint256 balance) {
-    (bool success, bytes memory result) = staticCall(token, data, 20000);
+   * @notice Call multiple contracts with the provided arbitrary data
+   * @param contracts The contracts to call
+   * @param data The data to call the contracts with
+   * @param gas The amount of gas to call the contracts with
+   * @return results The raw result of the contract calls
+   */
+  function call(
+    address[] calldata contracts,
+    bytes[] calldata data,
+    uint256 gas
+  ) public view returns (Result[] memory results) {
+    require(contracts.length == data.length, "Length must be equal");
+    results = new Result[](contracts.length);
 
-    if (success) {
-      (balance) = abi.decode(result, (uint256));
+    for (uint256 i = 0; i < contracts.length; i++) {
+      results[i] = staticCall(contracts[i], data[i], gas);
     }
   }
 
@@ -95,19 +92,23 @@ contract BalanceScanner {
    * @param target The address of the contract to call
    * @param data The data to call the contract with
    * @param gas The amount of gas to forward to the call
-   * @return success Whether the call succeeded
-   * @return result The returned data from the contract, or an empty byte array if the contract call failed
+   * @return result The result of the contract call
    */
   function staticCall(
     address target,
     bytes memory data,
     uint256 gas
-  ) private view returns (bool success, bytes memory result) {
+  ) private view returns (Result memory) {
     uint256 size = codeSize(target);
 
     if (size > 0) {
-      (success, result) = target.staticcall{ gas: gas }(data);
+      (bool success, bytes memory result) = target.staticcall{ gas: gas }(data);
+      if (success) {
+        return Result(success, result);
+      }
     }
+
+    return Result(false, "");
   }
 
   /**
