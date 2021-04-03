@@ -63,7 +63,7 @@ contract BalanceScanner {
    * @param data The data to call the contracts with
    * @return results The raw result of the contract calls
    */
-  function call(address[] calldata contracts, bytes[] calldata data) public view returns (Result[] memory results) {
+  function call(address[] calldata contracts, bytes[] calldata data) external view returns (Result[] memory results) {
     return call(contracts, data, gasleft());
   }
 
