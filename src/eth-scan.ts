@@ -1,5 +1,5 @@
 import { encode } from '@findeth/abi';
-import { callSingle, toNestedBalanceMap } from './api';
+import { callSingle, toBalanceMap, toNestedBalanceMap } from './api';
 import {
   ETHER_BALANCES_ID,
   ETHER_BALANCES_TYPE,
@@ -20,17 +20,19 @@ import { withId } from './utils';
  * @param {EthScanOptions} options
  * @return {Promise<BalanceMap>}
  */
-export const getEtherBalances = (
+export const getEtherBalances = async (
   provider: ProviderLike,
   addresses: string[],
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     addresses,
     (batch) => withId(ETHER_BALANCES_ID, encode(ETHER_BALANCES_TYPE, [batch])),
     options
   );
+
+  return toBalanceMap(addresses, results);
 };
 
 /**
@@ -49,12 +51,14 @@ export const getTokenBalances = async (
   tokenAddress: string,
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     addresses,
     (batch) => withId(TOKEN_BALANCES_ID, encode(TOKEN_BALANCES_TYPE, [batch, tokenAddress])),
     options
   );
+
+  return toBalanceMap(addresses, results);
 };
 
 /**
@@ -89,16 +93,18 @@ export const getTokensBalances = async (
  * @param {EthScanOptions} options
  * @return {Promise<BalanceMap>}
  */
-export const getTokensBalance = (
+export const getTokensBalance = async (
   provider: ProviderLike,
   address: string,
   tokenAddresses: string[],
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     tokenAddresses,
     (batch) => withId(TOKENS_BALANCE_ID, encode(TOKENS_BALANCE_TYPE, [address, batch])),
     options
   );
+
+  return toBalanceMap(tokenAddresses, results);
 };

@@ -20,14 +20,22 @@ export const fixture = async (
   addresses: string[];
   provider: MockProvider;
   token: MockContract;
+  tokenA: MockContract;
+  tokenB: MockContract;
 }> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
   const token = await deployMockContract(signer, ERC20Artifact.abi);
 
+  const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+  await tokenA.mock.balanceOf.returns('1000');
+
+  const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+  await tokenB.mock.balanceOf.returns('1');
+
   const addresses = await Promise.all(signers.slice(1).map((s) => s.getAddress()));
 
-  return { contract, signers, addresses, provider, token };
+  return { contract, signers, addresses, provider, token, tokenA, tokenB };
 };
 
 describe('eth-scan', () => {
@@ -67,12 +75,7 @@ describe('eth-scan', () => {
 
   describe('getTokensBalances', () => {
     it('returns multiple token balances, for multiple addresses', async () => {
-      const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenB.mock.balanceOf.returns('1');
+      const { contract, signers, addresses, tokenA, tokenB } = await loadFixture(fixture);
 
       const balances = await getTokensBalances(ethers.provider, addresses, [tokenA.address, tokenB.address], {
         contractAddress: contract.address
@@ -101,12 +104,7 @@ describe('eth-scan', () => {
 
   describe('getTokensBalance', () => {
     it('returns multiple token balances for a single address', async () => {
-      const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenB.mock.balanceOf.returns('1');
+      const { contract, signers, addresses, tokenA, tokenB } = await loadFixture(fixture);
 
       const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {
         contractAddress: contract.address

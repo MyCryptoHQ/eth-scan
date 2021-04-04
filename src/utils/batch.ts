@@ -1,3 +1,5 @@
+import { Result } from '../types';
+
 /**
  * Split an array per `size` items.
  *
@@ -15,12 +17,13 @@ export const chunk = <T>(input: T[], size: number): T[][] => {
 /**
  * Batch the function calls to `handler` per `size` items.
  *
- * @param {(addresses: string[]) => Promise<BigNumber[]>} handler A function that takes a batch of addresses and returns the balance for the addresses.
+ * @param {(addresses: string[]) => Promise<T[]>} handler A function that takes a batch of addresses and returns the balance for the addresses.
  * @param {number} size The size of the batches.
  * @param {string[]} addresses The addresses to batch.
- * @return {Promise<BigNumber[]>} A promise with the balances.
+ * @return {Promise<T[]>} A promise with the balances.
+ * @template T
  */
-export const batch = async <T = bigint>(
+export const batch = async <T = Result>(
   handler: (addresses: string[]) => Promise<T[]>,
   size: number,
   addresses: string[]

@@ -18,9 +18,3 @@ export const ETHER_BALANCES_TYPE: ['address[]'] = ['address[]'];
  */
 export const TOKENS_BALANCE_ID = 'e5da1b68';
 export const TOKENS_BALANCE_TYPE: ['address', 'address[]'] = ['address', 'address[]'];
-
-/**
- * tokensBalances(address[],address[])
- */
-export const TOKENS_BALANCES_ID = '06187b4f';
-export const TOKENS_BALANCES_TYPE: ['address[]', 'address[]'] = ['address[]', 'address[]'];

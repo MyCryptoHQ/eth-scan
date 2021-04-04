@@ -1,38 +1,40 @@
-import { decode } from '@findeth/abi';
+import { decode, toNumber } from '@findeth/abi';
 import { BATCH_SIZE, CONTRACT_ADDRESS } from './constants';
 import { call, ProviderLike } from './providers';
-import { BalanceMap, EthScanOptions } from './types';
+import { BalanceMap, EthScanOptions, Result } from './types';
 import { batch } from './utils';
 
 /**
  * Get a balance map from an array of addresses and an array of balances.
  *
  * @param {string[]} addresses
- * @param {bigint[]} balances
+ * @param {bigint[]} results
  * @return {BalanceMap}
  */
-export const toBalanceMap = (addresses: string[], balances: Array<bigint>): BalanceMap => {
-  return balances.reduce<BalanceMap>((current, next, index) => {
+export const toBalanceMap = (addresses: string[], results: Array<bigint | Result>): BalanceMap => {
+  return results.reduce<BalanceMap>((current, next, index) => {
+    const value = typeof next === 'bigint' ? next : toNumber(next[1]);
+
     return {
       ...current,
-      [addresses[index]]: next
+      [addresses[index]]: value
     };
   }, {});
 };
 
 /**
- * Get a nested balance map from an array of addresses, token addresses, and balances.
+ * Get a nested balance map from an array of addresses, token addresses, and results.
  *
  * @param {string[]} addresses
  * @param {bigint[]} tokenAddresses
- * @param {BalanceMap<BalanceMap>} balances
+ * @param {BalanceMap<BalanceMap>} results
  */
 export const toNestedBalanceMap = (
   addresses: string[],
   tokenAddresses: string[],
-  balances: Array<Array<bigint>>
+  results: Array<Array<bigint | Result>>
 ): BalanceMap<BalanceMap> => {
-  return balances.reduce<BalanceMap<BalanceMap>>((current, next, index) => {
+  return results.reduce<BalanceMap<BalanceMap>>((current, next, index) => {
     return {
       ...current,
       [addresses[index]]: toBalanceMap(tokenAddresses, next)
@@ -54,21 +56,20 @@ export const callSingle = async (
   addresses: string[],
   encodeData: (addresses: string[]) => string,
   options?: EthScanOptions
-): Promise<BalanceMap> => {
+): Promise<Result[]> => {
   const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
   const batchSize = options?.batchSize ?? BATCH_SIZE;
 
-  const result = await batch(
+  return batch(
     async (batchedAddresses: string[]) => {
       const data = encodeData(batchedAddresses);
+      const buffer = await call(provider, contractAddress, data);
 
-      return decode(['uint256[]'], await call(provider, contractAddress, data))[0];
+      return decode(['(bool,bytes)[]'], buffer)[0] as Result[];
     },
     batchSize,
     addresses
   );
-
-  return toBalanceMap(addresses, result);
 };
 
 export const callMultiple = async (
@@ -77,19 +78,17 @@ export const callMultiple = async (
   otherAddresses: string[],
   encodeData: (addresses: string[], otherAddresses: string[]) => string,
   options?: EthScanOptions
-): Promise<BalanceMap<BalanceMap>> => {
+): Promise<Result[][]> => {
   const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
   const batchSize = options?.batchSize ?? BATCH_SIZE;
 
-  const result = await batch(
+  return batch(
     async (batchedAddresses: string[]) => {
       const data = encodeData(batchedAddresses, otherAddresses);
 
-      return decode(['uint256[][]'], await call(provider, contractAddress, data))[0] as Array<Array<bigint>>;
+      return decode(['(bool,bytes))[][]'], await call(provider, contractAddress, data))[0] as Result[][];
     },
     batchSize,
     addresses
   );
-
-  return toNestedBalanceMap(addresses, otherAddresses, result);
 };

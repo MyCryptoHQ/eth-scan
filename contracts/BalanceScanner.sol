@@ -16,13 +16,13 @@ contract BalanceScanner {
   /**
    * @notice Get the Ether balance for all addresses specified
    * @param addresses The addresses to get the Ether balance for
-   * @return balances The Ether balance for all addresses in the same order as specified
+   * @return results The Ether balance for all addresses in the same order as specified
    */
-  function etherBalances(address[] calldata addresses) external view returns (uint256[] memory balances) {
-    balances = new uint256[](addresses.length);
+  function etherBalances(address[] calldata addresses) external view returns (Result[] memory results) {
+    results = new Result[](addresses.length);
 
     for (uint256 i = 0; i < addresses.length; i++) {
-      balances[i] = addresses[i].balance;
+      results[i] = Result(true, abi.encode(addresses[i].balance));
     }
   }
 

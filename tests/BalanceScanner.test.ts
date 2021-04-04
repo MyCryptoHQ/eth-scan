@@ -1,7 +1,7 @@
-import { concat, decode, encode, fromHex } from '@findeth/abi';
+import { concat, encode, fromHex } from '@findeth/abi';
 import IERC20Artifact from '@openzeppelin/contracts/build/contracts/IERC20.json';
 import { MockContract, MockProvider } from 'ethereum-waffle';
-import { BigNumber, Signer } from 'ethers';
+import { Signer } from 'ethers';
 import { waffle } from 'hardhat';
 import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
 import { BalanceScanner } from '../src/contracts';
@@ -37,14 +37,17 @@ describe('BalanceScanner', () => {
 
       const addresses = await Promise.all(signers.slice(1).map((signer) => signer.getAddress()));
       const balances = await Promise.all(signers.slice(1).map((signer) => signer.getBalance()));
+      const expectedValue = await Promise.all(
+        balances.map((balance) => [true, `0x${balance.toHexString().slice(2).padStart(64, '0')}`])
+      );
 
-      await expect(contract.etherBalances(addresses)).resolves.toEqual(balances);
+      await expect(getTuple(contract.etherBalances(addresses))).resolves.toEqual(expectedValue);
     });
 
     it('returns an empty array when no addresses passed', async () => {
       const { contract } = await loadFixture(fixture);
 
-      await expect(contract.etherBalances([])).resolves.toStrictEqual([]);
+      await expect(getTuple(contract.etherBalances([]))).resolves.toStrictEqual([]);
     });
   });
 
@@ -129,7 +132,9 @@ describe('BalanceScanner', () => {
 
       const data = concat([fromHex('70a08231'), encode(['address'], [address])]);
 
-      await expect(getTuple(contract.call([tokenA.address, tokenB.address], [data, data]))).resolves.toStrictEqual([
+      await expect(
+        getTuple(contract['call(address[],bytes[])']([tokenA.address, tokenB.address], [data, data]))
+      ).resolves.toStrictEqual([
         [true, '0x00000000000000000000000000000000000000000000000000000000000003e8'],
         [true, '0x0000000000000000000000000000000000000000000000000000000000000001']
       ]);
@@ -147,7 +152,7 @@ describe('BalanceScanner', () => {
       const data = concat([fromHex('70a08231'), encode(['address'], [address])]);
 
       await expect(
-        getTuple(contract.call([tokenA.address, tokenB.address, address], [data, data, data]))
+        getTuple(contract['call(address[],bytes[])']([tokenA.address, tokenB.address, address], [data, data, data]))
       ).resolves.toStrictEqual([
         [true, '0x00000000000000000000000000000000000000000000000000000000000003e8'],
         [false, '0x'],
