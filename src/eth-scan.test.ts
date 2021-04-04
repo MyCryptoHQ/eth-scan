@@ -120,19 +120,21 @@ describe('eth-scan', () => {
     });
 
     it('retries failed contract calls', async () => {
-      const { contract, addresses, tokenA, tokenB, invalidToken } = await loadFixture(fixture);
+      const { contract, addresses, token, tokenA, invalidToken } = await loadFixture(fixture);
 
       const balances = await getTokensBalances(
         ethers.provider,
         [addresses[0], addresses[1]],
-        [tokenA.address, invalidToken.address],
+        [tokenA.address, invalidToken.address, token.address],
         {
           contractAddress: contract.address
         }
       );
 
+      expect(balances[addresses[0]][token.address]).toBe(0n);
       expect(balances[addresses[0]][tokenA.address]).toBe(1000n);
       expect(balances[addresses[0]][invalidToken.address]).toBe(1000n);
+      expect(balances[addresses[1]][token.address]).toBe(0n);
       expect(balances[addresses[1]][tokenA.address]).toBe(1000n);
       expect(balances[addresses[1]][invalidToken.address]).toBe(0n);
     });
@@ -140,7 +142,7 @@ describe('eth-scan', () => {
 
   describe('getTokensBalance', () => {
     it('returns multiple token balances for a single address', async () => {
-      const { contract, signers, addresses, tokenA, tokenB } = await loadFixture(fixture);
+      const { contract, addresses, tokenA, tokenB } = await loadFixture(fixture);
 
       const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {
         contractAddress: contract.address
@@ -165,12 +167,18 @@ describe('eth-scan', () => {
     });
 
     it('retries failed contract calls', async () => {
-      const { contract, addresses, tokenA, invalidToken } = await loadFixture(fixture);
+      const { contract, addresses, token, tokenA, invalidToken } = await loadFixture(fixture);
 
-      const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, invalidToken.address], {
-        contractAddress: contract.address
-      });
+      const balances = await getTokensBalance(
+        ethers.provider,
+        addresses[0],
+        [token.address, tokenA.address, invalidToken.address],
+        {
+          contractAddress: contract.address
+        }
+      );
 
+      expect(balances[token.address]).toBe(0n);
       expect(balances[tokenA.address]).toBe(1000n);
       expect(balances[invalidToken.address]).toBe(1000n);
     });
