@@ -43,24 +43,30 @@ export const toNestedBalanceMap = (
 };
 
 /**
- * Low level API function to send a contract call that returns a single uint256 array.
+ * Low level API function to send a contract call that returns a single Result array. It will automatically retry any
+ * failed calls.
  *
- * @param {ProviderLike} provider
- * @param {string[]} addresses
- * @param {Function} encodeData
- * @param {EthScanOptions} options
- * @return {Promise<BalanceMap>}
+ * @param provider
+ * @param batchAddresses The addresses to batch by
+ * @param addresses The address(es) to use when retrying failed calls
+ * @param contractAddresses The contract address(es) to use when retrying failed calls
+ * @param encodeData
+ * @param encodeSingle
+ * @param options
  */
 export const callSingle = async (
   provider: ProviderLike,
-  addresses: string[],
+  batchAddresses: string[],
+  addresses: string | string[],
+  contractAddresses: string | string[],
   encodeData: (addresses: string[]) => string,
+  encodeSingle: (address: string) => string,
   options?: EthScanOptions
 ): Promise<Result[]> => {
   const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
   const batchSize = options?.batchSize ?? BATCH_SIZE;
 
-  return batch(
+  const results = await batch(
     async (batchedAddresses: string[]) => {
       const data = encodeData(batchedAddresses);
       const buffer = await call(provider, contractAddress, data);
@@ -68,27 +74,46 @@ export const callSingle = async (
       return decode(['(bool,bytes)[]'], buffer)[0] as Result[];
     },
     batchSize,
-    addresses
+    batchAddresses
   );
+
+  return retryCalls(provider, addresses, contractAddresses, results, encodeSingle);
 };
 
-export const callMultiple = async (
+/**
+ * Retry calls to the contract directly, if a contract call in the eth-scan contract failed.
+ *
+ * @param provider
+ * @param addresses
+ * @param contracts
+ * @param results
+ * @param encodeData
+ */
+export const retryCalls = async (
   provider: ProviderLike,
-  addresses: string[],
-  otherAddresses: string[],
-  encodeData: (addresses: string[], otherAddresses: string[]) => string,
-  options?: EthScanOptions
-): Promise<Result[][]> => {
-  const contractAddress = options?.contractAddress ?? CONTRACT_ADDRESS;
-  const batchSize = options?.batchSize ?? BATCH_SIZE;
+  addresses: string | string[],
+  contracts: string | string[],
+  results: Result[],
+  encodeData: (address: string) => string
+): Promise<Result[]> => {
+  return Promise.all(
+    results.map(async (result, index) => {
+      if (result[0]) {
+        return result;
+      }
 
-  return batch(
-    async (batchedAddresses: string[]) => {
-      const data = encodeData(batchedAddresses, otherAddresses);
+      const address = typeof addresses === 'string' ? addresses : addresses[index];
+      const contractAddress = typeof contracts === 'string' ? contracts : contracts[index];
+      const data = encodeData(address);
 
-      return decode(['(bool,bytes))[][]'], await call(provider, contractAddress, data))[0] as Result[][];
-    },
-    batchSize,
-    addresses
+      try {
+        const newResult = await call(provider, contractAddress, data);
+        return [true, newResult] as [boolean, Uint8Array];
+      } catch {
+        // noop
+      }
+
+      return result;
+    })
   );
 };

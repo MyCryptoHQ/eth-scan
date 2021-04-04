@@ -3,7 +3,8 @@ import { MockContract, MockProvider } from 'ethereum-waffle';
 import { Signer } from 'ethers';
 import { waffle, ethers } from 'hardhat';
 import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
-import { BalanceScanner } from './contracts';
+import ERC20InvalidMockArtifact from '../artifacts/contracts/mocks/ERC20InvalidMock.sol/ERC20InvalidMock.json';
+import { BalanceScanner, ERC20InvalidMock } from './contracts';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
 
 const { deployContract, deployMockContract, createFixtureLoader, provider } = waffle;
@@ -22,6 +23,7 @@ export const fixture = async (
   token: MockContract;
   tokenA: MockContract;
   tokenB: MockContract;
+  invalidToken: ERC20InvalidMock;
 }> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
@@ -35,7 +37,12 @@ export const fixture = async (
 
   const addresses = await Promise.all(signers.slice(1).map((s) => s.getAddress()));
 
-  return { contract, signers, addresses, provider, token, tokenA, tokenB };
+  const invalidToken = (await deployContract(signer, ERC20InvalidMockArtifact, [
+    addresses[0],
+    1000
+  ])) as ERC20InvalidMock;
+
+  return { contract, signers, addresses, provider, token, tokenA, tokenB, invalidToken };
 };
 
 describe('eth-scan', () => {
@@ -71,6 +78,17 @@ describe('eth-scan', () => {
         getTokenBalances(ethers.provider, addresses, token.address, { contractAddress: contract.address })
       ).not.toThrow();
     });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokenBalances(ethers.provider, [addresses[0], addresses[1]], invalidToken.address, {
+        contractAddress: contract.address
+      });
+
+      expect(balances[addresses[0]]).toBe(1000n);
+      expect(balances[addresses[1]]).toBe(0n);
+    });
   });
 
   describe('getTokensBalances', () => {
@@ -100,6 +118,24 @@ describe('eth-scan', () => {
         })
       ).not.toThrow();
     });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, tokenA, tokenB, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokensBalances(
+        ethers.provider,
+        [addresses[0], addresses[1]],
+        [tokenA.address, invalidToken.address],
+        {
+          contractAddress: contract.address
+        }
+      );
+
+      expect(balances[addresses[0]][tokenA.address]).toBe(1000n);
+      expect(balances[addresses[0]][invalidToken.address]).toBe(1000n);
+      expect(balances[addresses[1]][tokenA.address]).toBe(1000n);
+      expect(balances[addresses[1]][invalidToken.address]).toBe(0n);
+    });
   });
 
   describe('getTokensBalance', () => {
@@ -126,6 +162,17 @@ describe('eth-scan', () => {
           contractAddress: contract.address
         })
       ).not.toThrow();
+    });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, tokenA, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, invalidToken.address], {
+        contractAddress: contract.address
+      });
+
+      expect(balances[tokenA.address]).toBe(1000n);
+      expect(balances[invalidToken.address]).toBe(1000n);
     });
   });
 });

@@ -18,3 +18,9 @@ export const ETHER_BALANCES_TYPE: ['address[]'] = ['address[]'];
  */
 export const TOKENS_BALANCE_ID = 'e5da1b68';
 export const TOKENS_BALANCE_TYPE: ['address', 'address[]'] = ['address', 'address[]'];
+
+/**
+ * balanceOf(address)
+ */
+export const BALANCE_OF_ID = '70a08231';
+export const BALANCE_OF_TYPE: ['address'] = ['address'];

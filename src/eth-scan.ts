@@ -1,6 +1,8 @@
 import { encode } from '@findeth/abi';
-import { callSingle, toBalanceMap, toNestedBalanceMap } from './api';
+import { callSingle, retryCalls, toBalanceMap, toNestedBalanceMap } from './api';
 import {
+  BALANCE_OF_ID,
+  BALANCE_OF_TYPE,
   ETHER_BALANCES_ID,
   ETHER_BALANCES_TYPE,
   TOKEN_BALANCES_ID,
@@ -28,7 +30,10 @@ export const getEtherBalances = async (
   const results = await callSingle(
     provider,
     addresses,
+    [],
+    [],
     (batch) => withId(ETHER_BALANCES_ID, encode(ETHER_BALANCES_TYPE, [batch])),
+    () => '',
     options
   );
 
@@ -54,7 +59,10 @@ export const getTokenBalances = async (
   const results = await callSingle(
     provider,
     addresses,
+    addresses,
+    tokenAddress,
     (batch) => withId(TOKEN_BALANCES_ID, encode(TOKEN_BALANCES_TYPE, [batch, tokenAddress])),
+    (address) => withId(BALANCE_OF_ID, encode(BALANCE_OF_TYPE, [address])),
     options
   );
 
@@ -102,7 +110,10 @@ export const getTokensBalance = async (
   const results = await callSingle(
     provider,
     tokenAddresses,
+    address,
+    tokenAddresses,
     (batch) => withId(TOKENS_BALANCE_ID, encode(TOKENS_BALANCE_TYPE, [address, batch])),
+    () => withId(BALANCE_OF_ID, encode(BALANCE_OF_TYPE, [address])),
     options
   );
 
