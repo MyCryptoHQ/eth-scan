@@ -3,7 +3,8 @@ import { MockContract, MockProvider } from 'ethereum-waffle';
 import { Signer } from 'ethers';
 import { waffle, ethers } from 'hardhat';
 import BalanceScannerArtifact from '../artifacts/contracts/BalanceScanner.sol/BalanceScanner.json';
-import { BalanceScanner } from './contracts';
+import ERC20InvalidMockArtifact from '../artifacts/contracts/mocks/ERC20InvalidMock.sol/ERC20InvalidMock.json';
+import { BalanceScanner, ERC20InvalidMock } from './contracts';
 import { getEtherBalances, getTokenBalances, getTokensBalance, getTokensBalances } from './eth-scan';
 
 const { deployContract, deployMockContract, createFixtureLoader, provider } = waffle;
@@ -20,14 +21,28 @@ export const fixture = async (
   addresses: string[];
   provider: MockProvider;
   token: MockContract;
+  tokenA: MockContract;
+  tokenB: MockContract;
+  invalidToken: ERC20InvalidMock;
 }> => {
   const signer = signers[0];
   const contract = (await deployContract(signer, BalanceScannerArtifact)) as BalanceScanner;
   const token = await deployMockContract(signer, ERC20Artifact.abi);
 
+  const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+  await tokenA.mock.balanceOf.returns('1000');
+
+  const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
+  await tokenB.mock.balanceOf.returns('1');
+
   const addresses = await Promise.all(signers.slice(1).map((s) => s.getAddress()));
 
-  return { contract, signers, addresses, provider, token };
+  const invalidToken = (await deployContract(signer, ERC20InvalidMockArtifact, [
+    addresses[0],
+    1000
+  ])) as ERC20InvalidMock;
+
+  return { contract, signers, addresses, provider, token, tokenA, tokenB, invalidToken };
 };
 
 describe('eth-scan', () => {
@@ -63,16 +78,22 @@ describe('eth-scan', () => {
         getTokenBalances(ethers.provider, addresses, token.address, { contractAddress: contract.address })
       ).not.toThrow();
     });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokenBalances(ethers.provider, [addresses[0], addresses[1]], invalidToken.address, {
+        contractAddress: contract.address
+      });
+
+      expect(balances[addresses[0]]).toBe(1000n);
+      expect(balances[addresses[1]]).toBe(0n);
+    });
   });
 
   describe('getTokensBalances', () => {
     it('returns multiple token balances, for multiple addresses', async () => {
-      const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenB.mock.balanceOf.returns('1');
+      const { contract, signers, addresses, tokenA, tokenB } = await loadFixture(fixture);
 
       const balances = await getTokensBalances(ethers.provider, addresses, [tokenA.address, tokenB.address], {
         contractAddress: contract.address
@@ -97,16 +118,31 @@ describe('eth-scan', () => {
         })
       ).not.toThrow();
     });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, token, tokenA, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokensBalances(
+        ethers.provider,
+        [addresses[0], addresses[1]],
+        [tokenA.address, invalidToken.address, token.address],
+        {
+          contractAddress: contract.address
+        }
+      );
+
+      expect(balances[addresses[0]][token.address]).toBe(0n);
+      expect(balances[addresses[0]][tokenA.address]).toBe(1000n);
+      expect(balances[addresses[0]][invalidToken.address]).toBe(1000n);
+      expect(balances[addresses[1]][token.address]).toBe(0n);
+      expect(balances[addresses[1]][tokenA.address]).toBe(1000n);
+      expect(balances[addresses[1]][invalidToken.address]).toBe(0n);
+    });
   });
 
   describe('getTokensBalance', () => {
     it('returns multiple token balances for a single address', async () => {
-      const { contract, signers, addresses } = await loadFixture(fixture);
-      const tokenA = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenA.mock.balanceOf.returns('1000');
-
-      const tokenB = (await deployMockContract(signers[0], ERC20Artifact.abi)) as MockContract;
-      await tokenB.mock.balanceOf.returns('1');
+      const { contract, addresses, tokenA, tokenB } = await loadFixture(fixture);
 
       const balances = await getTokensBalance(ethers.provider, addresses[0], [tokenA.address, tokenB.address], {
         contractAddress: contract.address
@@ -128,6 +164,23 @@ describe('eth-scan', () => {
           contractAddress: contract.address
         })
       ).not.toThrow();
+    });
+
+    it('retries failed contract calls', async () => {
+      const { contract, addresses, token, tokenA, invalidToken } = await loadFixture(fixture);
+
+      const balances = await getTokensBalance(
+        ethers.provider,
+        addresses[0],
+        [token.address, tokenA.address, invalidToken.address],
+        {
+          contractAddress: contract.address
+        }
+      );
+
+      expect(balances[token.address]).toBe(0n);
+      expect(balances[tokenA.address]).toBe(1000n);
+      expect(balances[invalidToken.address]).toBe(1000n);
     });
   });
 });

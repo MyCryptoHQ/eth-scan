@@ -1,9 +1,10 @@
-import { decode, encode, fromHex } from '@findeth/abi';
+import { decode, encode, fromHex, toHex } from '@findeth/abi';
 import { network, ethers, waffle } from 'hardhat';
 import { JsonRpcServer } from 'hardhat/internal/hardhat-network/jsonrpc/server';
 import { ETHER_BALANCES_ID, ETHER_BALANCES_TYPE, TOKEN_BALANCES_ID, TOKEN_BALANCES_TYPE } from '../constants';
 import { fixture } from '../eth-scan.test';
-import { withId } from '../utils/abi';
+import { Result } from '../types';
+import { withId } from '../utils';
 import HttpProvider from './http';
 
 const { createFixtureLoader, provider } = waffle;
@@ -44,11 +45,14 @@ describe('call', () => {
     const data = withId(ETHER_BALANCES_ID, encode(ETHER_BALANCES_TYPE, [addresses]));
     const response = await call('http://127.0.0.1:8547', contract.address, data);
 
-    const decoded = decode(['uint256[]'], fromHex(response))[0];
+    const results = decode(['(bool,bytes)[]'], fromHex(response))[0] as Result[];
 
     for (let i = 0; i < addresses.length; i++) {
-      const balance = BigInt((await ethers.provider.getBalance(addresses[i])).toHexString());
-      expect(balance).toBe(decoded[i]);
+      const balance = await ethers.provider.getBalance(addresses[i]);
+      const [success, value] = results[i];
+
+      expect(success).toBe(true);
+      expect(toHex(value)).toBe(balance.toHexString().slice(2).padStart(64, '0'));
     }
   });
 
@@ -59,10 +63,13 @@ describe('call', () => {
     const data = withId(TOKEN_BALANCES_ID, encode(TOKEN_BALANCES_TYPE, [addresses, token.address]));
     const response = await call('http://127.0.0.1:8547', contract.address, data);
 
-    const decoded = decode(['uint256[]'], fromHex(response))[0];
+    const results = decode(['(bool,bytes)[]'], fromHex(response))[0] as Result[];
 
     for (let i = 0; i < addresses.length; i++) {
-      expect(decoded[i]).toBe(1000n);
+      const [success, value] = results[i];
+
+      expect(success).toBe(true);
+      expect(toHex(value)).toBe('00000000000000000000000000000000000000000000000000000000000003e8');
     }
   });
 });

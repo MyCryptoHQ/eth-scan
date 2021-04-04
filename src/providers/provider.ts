@@ -28,6 +28,6 @@ export const call = async (providerLike: ProviderLike, contractAddress: string, 
     const result = await provider.call(providerLike, contractAddress, data);
     return fromHex(result);
   } catch (error) {
-    throw new Error(`Failed to get data from eth-scan contract: ${error.stack ?? error.toString()}`);
+    throw new Error(`Failed to get data from contract: ${error.stack ?? error.toString()}`);
   }
 };

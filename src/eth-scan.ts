@@ -1,6 +1,8 @@
 import { encode } from '@findeth/abi';
-import { callSingle, toNestedBalanceMap } from './api';
+import { callSingle, retryCalls, toBalanceMap, toNestedBalanceMap } from './api';
 import {
+  BALANCE_OF_ID,
+  BALANCE_OF_TYPE,
   ETHER_BALANCES_ID,
   ETHER_BALANCES_TYPE,
   TOKEN_BALANCES_ID,
@@ -20,17 +22,22 @@ import { withId } from './utils';
  * @param {EthScanOptions} options
  * @return {Promise<BalanceMap>}
  */
-export const getEtherBalances = (
+export const getEtherBalances = async (
   provider: ProviderLike,
   addresses: string[],
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     addresses,
+    [],
+    [],
     (batch) => withId(ETHER_BALANCES_ID, encode(ETHER_BALANCES_TYPE, [batch])),
+    () => '',
     options
   );
+
+  return toBalanceMap(addresses, results);
 };
 
 /**
@@ -49,12 +56,17 @@ export const getTokenBalances = async (
   tokenAddress: string,
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     addresses,
+    addresses,
+    tokenAddress,
     (batch) => withId(TOKEN_BALANCES_ID, encode(TOKEN_BALANCES_TYPE, [batch, tokenAddress])),
+    (address) => withId(BALANCE_OF_ID, encode(BALANCE_OF_TYPE, [address])),
     options
   );
+
+  return toBalanceMap(addresses, results);
 };
 
 /**
@@ -89,16 +101,21 @@ export const getTokensBalances = async (
  * @param {EthScanOptions} options
  * @return {Promise<BalanceMap>}
  */
-export const getTokensBalance = (
+export const getTokensBalance = async (
   provider: ProviderLike,
   address: string,
   tokenAddresses: string[],
   options?: EthScanOptions
 ): Promise<BalanceMap> => {
-  return callSingle(
+  const results = await callSingle(
     provider,
     tokenAddresses,
+    address,
+    tokenAddresses,
     (batch) => withId(TOKENS_BALANCE_ID, encode(TOKENS_BALANCE_TYPE, [address, batch])),
+    () => withId(BALANCE_OF_ID, encode(BALANCE_OF_TYPE, [address])),
     options
   );
+
+  return toBalanceMap(tokenAddresses, results);
 };

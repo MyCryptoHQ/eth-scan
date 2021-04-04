@@ -20,7 +20,7 @@ export const TOKENS_BALANCE_ID = 'e5da1b68';
 export const TOKENS_BALANCE_TYPE: ['address', 'address[]'] = ['address', 'address[]'];
 
 /**
- * tokensBalances(address[],address[])
+ * balanceOf(address)
  */
-export const TOKENS_BALANCES_ID = '06187b4f';
-export const TOKENS_BALANCES_TYPE: ['address[]', 'address[]'] = ['address[]', 'address[]'];
+export const BALANCE_OF_ID = '70a08231';
+export const BALANCE_OF_TYPE: ['address'] = ['address'];
