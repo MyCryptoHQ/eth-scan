@@ -47,7 +47,7 @@
     "estimate-gas": "ts-node --files scripts/estimate-gas.ts"
   },
   "dependencies": {
-    "@findeth/abi": "^0.6.1",
+    "@findeth/abi": "^0.7.1",
     "isomorphic-unfetch": "^3.1.0"
   },
   "devDependencies": {
