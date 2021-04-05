@@ -1877,10 +1877,10 @@
     "@ethersproject/properties" "^5.0.3"
     "@ethersproject/strings" "^5.0.3"
 
-"@findeth/abi@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@findeth/abi/-/abi-0.6.1.tgz#cb1f353b3a70fb2b31e5527bb9c8a8bdd636acb9"
-  integrity sha512-5W08ufTFM5PrHfelEdsi0MeVFwMQH1n5EFnv/l2kMMyFMlqb3hdtf9h8oczyZfU6JIvqsoC3+fguU8nbOnGyAQ==
+"@findeth/abi@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@findeth/abi/-/abi-0.7.1.tgz#60d0801cb252e587dc3228f00c00581bb748aebc"
+  integrity sha512-9uNu+/UxeuIibxIB7slf7BGG2PWjgBZr+rKzohhLb7VuoZjmlCcKZkenqwErROxkPdsap7OGO/o1DuYMvObMvw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
