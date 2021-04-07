@@ -1,6 +1,6 @@
 # eth-scan
 
-`eth-scan` is a library written in TypeScript, to help you fetch Ether or (ERC-20) token balances for multiple addresses in an efficient way. The library uses a smart contract to fetch the balances in a single call to a node. The contract is currently deployed at [0x571C62a1c863aEAD01c1d34D8cB3Ee2c6f938800](https://etherscan.io/address/0x571C62a1c863aEAD01c1d34D8cB3Ee2c6f938800) on the Ethereum mainnet, Goerli, Kovan, Rinkeby, Ropsten, and xDai.
+`eth-scan` is a library written in TypeScript, to help you fetch Ether or (ERC-20) token balances for multiple addresses in an efficient way. The library uses a smart contract to fetch the balances in a single call to a node. The contract is currently deployed at [0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5](https://etherscan.io/address/0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5) on the Ethereum mainnet, Goerli, Kovan, Rinkeby, Ropsten, and xDai.
 
 It can use Web3.js, Ethers.js, JSON-RPC (HTTP), or an EIP-1193-compatible provider to get the balances. See [Getting Started](#getting-started) for more info.
 
@@ -102,7 +102,7 @@ Get ERC-20 token balances from `tokens` for `address`. If one of the token addre
 
 ### `EthScanOptions`
 
-* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x86f25b64e1fe4c5162cdeed5245575d32ec549db](https://etherscan.io/address/0x86f25b64e1fe4c5162cdeed5245575d32ec549db).
+* `contractAddress` \<string\> (optional) - The address of the smart contract to use. Defaults to [0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5](https://etherscan.io/address/0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5).
 
 * `batchSize` \<number\> (optional) - The size of the call batches. Defaults to 1000.
 
