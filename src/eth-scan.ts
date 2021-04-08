@@ -1,5 +1,5 @@
 import { encode } from '@findeth/abi';
-import { callSingle, retryCalls, toBalanceMap, toNestedBalanceMap } from './api';
+import { callSingle, toBalanceMap, toNestedBalanceMap } from './api';
 import {
   BALANCE_OF_ID,
   BALANCE_OF_TYPE,

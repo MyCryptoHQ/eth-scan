@@ -13,7 +13,7 @@ import { batch } from './utils';
  */
 export const toBalanceMap = (addresses: string[], results: Array<bigint | Result>): BalanceMap => {
   return results.reduce<BalanceMap>((current, next, index) => {
-    const value = typeof next === 'bigint' ? next : toNumber(next[1]);
+    const value = typeof next === 'bigint' ? next : toNumber(next[1].slice(0, 32));
 
     return {
       ...current,
