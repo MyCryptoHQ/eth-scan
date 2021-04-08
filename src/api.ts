@@ -4,6 +4,10 @@ import { call, ProviderLike } from './providers';
 import { BalanceMap, EthScanOptions, Result } from './types';
 import { batch } from './utils';
 
+const isResult = (result: unknown): result is Result => {
+  return Array.isArray(result) && result.length === 2;
+};
+
 /**
  * Get a balance map from an array of addresses and an array of balances.
  *
@@ -13,7 +17,7 @@ import { batch } from './utils';
  */
 export const toBalanceMap = (addresses: string[], results: Array<bigint | Result>): BalanceMap => {
   return results.reduce<BalanceMap>((current, next, index) => {
-    const value = typeof next === 'bigint' ? next : toNumber(next[1].slice(0, 32));
+    const value = isResult(next) ? toNumber(next[1].slice(0, 32)) : next;
 
     return {
       ...current,
