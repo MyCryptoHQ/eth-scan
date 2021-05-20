@@ -53,4 +53,15 @@ describe('call', () => {
     // @ts-expect-error Invalid provider type
     await expect(() => call({}, CONTRACT_ADDRESS, '0x')).rejects.toThrow('Invalid provider type');
   });
+
+  it('throws if a call reverts', async () => {
+    (EthersProvider.isProvider as jest.MockedFunction<typeof EthersProvider.isProvider>).mockImplementationOnce(
+      () => true
+    );
+    (EthersProvider.call as jest.MockedFunction<typeof EthersProvider.call>).mockImplementationOnce(
+      async () => '08c379a'
+    );
+
+    await expect(call('foo', CONTRACT_ADDRESS, '0x')).rejects.toThrow();
+  });
 });
