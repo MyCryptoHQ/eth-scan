@@ -1,4 +1,4 @@
-import { fromHex } from '@findeth/abi';
+import { fromHex, stripPrefix } from '@findeth/abi';
 import type { Provider, ProviderType } from '../types';
 import EIP1193Provider from './eip-1193';
 import EthersProvider from './ethers';
@@ -26,6 +26,10 @@ export const call = async (providerLike: ProviderLike, contractAddress: string, 
 
   try {
     const result = await provider.call(providerLike, contractAddress, data);
+    if (stripPrefix(result).startsWith('08c379a')) {
+      throw new Error('Call reverted');
+    }
+
     return fromHex(result);
   } catch (error) {
     throw new Error(`Failed to get data from contract: ${error.stack ?? error.toString()}`);
